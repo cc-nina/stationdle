@@ -13,9 +13,36 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
 	<style>
-		html, body {
-			height: 100%;
+		* {
+			padding: 0;
 			margin: 0;
+		}
+
+		html {
+			font-family: Helvetica
+		}
+
+		:root {
+			--base-color: white;
+			--base-variant: #e8e9ed;
+			--text-color: #111528;
+			--secondary-text: #232738;
+			--primary-color: #3a435d;
+			--accent-color: #0071ff;
+		}
+
+		.darkmode {
+			--base-color: #070b1d;
+			--base-variant: #101425;
+			--text-color: #ffffff;
+			--secondary-text: #a4a5b8;
+			--primary-color: #3a435d;
+			--accent-color: #0071ff;
+		}
+
+		body {
+			background-color: var(--base-color);
+			color: var(--text-color);
 		}
 		.leaflet-container {
 			height: 400px;
@@ -29,19 +56,23 @@
 			float: center;
 			display: block;
 			color: #ffffff;
+			padding: 1% 2%;
 			text-align: center;
-			padding: 14px 16px;
 			text-decoration: none;
 			font-size: 21px;
-			font-family: Helvetica;
 			font-weight: bold;
 			letter-spacing: 1.5px;
+		}
+
+		#map {
+			width: 100vw; 
+			height: 45vh;
 		}
 	</style>
 
 	
 </head>
-<body>
+<body class="darkmode">
 
 <div class="topnav">
   <a>stationguessr</a>
@@ -49,7 +80,10 @@
 
 
 
-<div id="map" style="width: 100vw; height: 100vh;"></div>
+<div id="map"></div>
+<div>
+	hi brothers
+</div>
 <script>
 
 	const map = L.map('map').setView([43.837208, -79.508278], 9);
