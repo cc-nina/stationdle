@@ -76,8 +76,8 @@
 			color: var(--text-color);
 		}
 		.leaflet-container {
-			height: 400px;
-			width: 600px;
+			height: 100vh;
+			width: 100vw;
 			max-width: 100%;
 			max-height: 100%;
 		}
@@ -96,9 +96,43 @@
 		}
 
 		#map {
-			width: 100vw; 
-			height: 45vh;
+			box-sizing: border-box;
+			display: flex;
+			justify-content: center;
+            align-items: center;
 		}
+
+		.container {
+			display: flex;
+			flex-direction: column;
+			height: 100vh;
+		}
+		.box {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 16px;
+			border: 2px solid var(--secondary-text);
+			padding: 20px;
+		}
+
+		.box:first-child{
+			background-color: royalblue;
+		}
+
+		.box:last-child{
+			background-color: tomato;
+		}
+
+		@media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+
 	</style>
 	<script type="text/javascript" src="darkmode.js" defer>
 
@@ -122,11 +156,15 @@
 </header>
 
 
-
-<div id="map"></div>
-<div>
-	hi brothers
+<div class="container">
+	<div class="box" id="map"></div>
+	<div class="box" id="guessing">
+		hi brothers
+	</div>
 </div>
+
+
+
 <script>
 
 	const map = L.map('map').setView([43.837208, -79.508278], 9);
