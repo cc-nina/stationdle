@@ -75,7 +75,6 @@
 		body {
 			background-color: var(--base-color);
 			color: var(--text-color);
-			overflow: hidden;
 			height: 100%;
 			margin: 0;
 		}
@@ -130,6 +129,7 @@
 			justify-content: center;
 			border-radius: 16px;
 			border: 15px solid var(--base-color);
+			
 			padding: 20px;
 			padding-top: 40px;
 		}
@@ -144,14 +144,23 @@
 				height: 100vh;
 				width: 50vw;
 			}
-			
+
 			#guessing {
 				height: 100vh;
 				width: 50vw;
 			}
 
-        }
+			.allstations {
+				width: 100%;
+				height: 100%;
+			}
 
+			.wrapped {
+				height: 95vh;
+			}
+
+
+        }
 
 		.station {
 			border-radius: 7px;
@@ -185,14 +194,13 @@
 
 		.wrapped {
 			width: 100%;
-			
 		}
 
 		.allstations {
 			width: 100%;
 			overflow-x: clip;
 			overflow-y: scroll;
-			height: 85vh;
+			height: 35vh;
 		}
 
 
