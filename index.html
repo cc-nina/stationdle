@@ -20,7 +20,7 @@
 		}
 
 		html {
-			font-family: Helvetica
+			font-family: Helvetica;
 		}
 
 		:root {
@@ -75,6 +75,9 @@
 		body {
 			background-color: var(--base-color);
 			color: var(--text-color);
+			overflow: hidden;
+			height: 100%;
+			margin: 0;
 		}
 		.leaflet-container {
 			height: 100vh;
@@ -101,6 +104,7 @@
 			display: flex;
 			justify-content: center;
             align-items: center;
+			height: 40vh;
 		}
 
 		#guessing {
@@ -108,8 +112,10 @@
 			display: flex;
 			justify-content: center;
             align-items: center;
-			border: 2px solid var(--base-variant);
-			height: 100vh;
+			height: 30vh;
+			background-color: var(--base-variant);
+			padding-bottom: 20px;
+			padding-top: 55px;
 		}
 
 		.container {
@@ -123,8 +129,9 @@
 			align-items: center;
 			justify-content: center;
 			border-radius: 16px;
-			border: 10px solid var(--base-color);
+			border: 15px solid var(--base-color);
 			padding: 20px;
+			padding-top: 40px;
 		}
 
 		@media (min-width: 768px) {
@@ -132,6 +139,17 @@
                 flex-direction: row;
                 align-items: center;
             }
+			
+			#map {
+				height: 100vh;
+				width: 50vw;
+			}
+			
+			#guessing {
+				height: 100vh;
+				width: 50vw;
+			}
+
         }
 
 
@@ -167,6 +185,14 @@
 
 		.wrapped {
 			width: 100%;
+			
+		}
+
+		.allstations {
+			width: 100%;
+			overflow-x: clip;
+			overflow-y: scroll;
+			height: 85vh;
 		}
 
 
@@ -199,15 +225,63 @@
 	<div class="box" id="guessing">
 		<div class="wrapped">
 			<input type="text" placeholder="🔎 Search..." class="search">
-			<div class="station">
-				station 1
+			<div class="allstations">
+					<div class="station">
+					station 1
+				</div>
+				<div class="station">
+					station 2
+				</div>
+				<div class="station">
+					station 3
+				</div>
+				<div class="station">
+					station 4
+				</div>
+				<div class="station">
+					station 5
+				</div>
+				<div class="station">
+					station 6
+				</div>
+				<div class="station">
+					station 7
+				</div>
+				<div class="station">
+					station 8
+				</div>
+				<div class="station">
+					station 9
+				</div>
+				<div class="station">
+					station 10
+				</div>
+				<div class="station">
+					station 11
+				</div>
+				<div class="station">
+					station 12
+				</div>
+				<div class="station">
+					station 13
+				</div>
+				<div class="station">
+					station 14
+				</div>
+				<div class="station">
+					station 15
+				</div>
+				<div class="station">
+					station 16
+				</div>
+				<div class="station">
+					station 17
+				</div>
+				<div class="station">
+					station 18
+				</div>
 			</div>
-			<div class="station">
-				station 2
-			</div>
-			<div class="station">
-				station 3
-			</div>
+			
 		</div>
 	</div>
 </div>
