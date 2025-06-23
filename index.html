@@ -214,6 +214,18 @@
 			overflow-y: scroll;
 			height: 80vh;
 		}
+
+		.square {
+			height: 30px;
+			width: 30px;
+			background-color: #555;
+			border-radius: 5px;
+			justify-content: center; 
+			align-items: center;
+			display: flex;
+			font-weight: bold;
+			font-family: Helvetica;
+		}
 	</style>
 	<script type="text/javascript" src="darkmode.js" defer></script>
 	<!--<script type="text/javascript" src="script.js" defer></script>-->
@@ -221,7 +233,6 @@
 	
 </head>
 <body class="darkmode">
-
 	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 	<script>
 		const { createClient } = supabase
@@ -272,6 +283,47 @@
 
 			L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
 
+			const {count, error} = await _supabase
+			.from('gostations')
+			.select('*', { count: 'exact', head: true })
+
+			console.log(count)
+
+			const {data: stations, err_stations} = await _supabase
+			.from('gostations')
+			.select('colour, line_abbr, stat_name')
+
+			console.log(stations)
+			console.log(stations[0].colour)
+
+			let text = ""
+			text += "<div class="station">"
+			
+			/**/
+			for (let i = 0; i < count; i++) {
+				text += "<div class="station"><span class="square" style="background-color: var(--stations[i].colour)">var(--stations[i].line_abbr)</span>
+				var(--stations[i].stat_name)</div>"
+			}
+
+			
+			console.log(text)
+
+			// what is each thing supposed to look like
+			/*
+
+			<div class="station">
+				<span class="square" style="background-color: var(stations[i].colour)">var(stations[i].line_abbr)</span>
+				var(stations[i].stat_name)
+			</div>
+
+			this is what it currently looks like
+			<div class="station">
+					station 17
+			</div>
+
+			*/
+
+
         })()
 	</script>
 
@@ -291,7 +343,8 @@
 		<div class="wrapped">
 			<input type="text" placeholder="🔎 Search..." class="search">
 			<div class="allstations">
-					<div class="station">
+				<div class="station">
+					<span class="square">KI</span>
 					station 1
 				</div>
 				<div class="station">
@@ -367,17 +420,17 @@
 				}
 			});
 
-			var UN = new StationIcon({iconUrl: './images/un.png'}),
-				BR = new StationIcon({iconUrl: './images/br.png'}),
-				KI = new StationIcon({iconUrl: './images/ki.png'}),
-				LE = new StationIcon({iconUrl: './images/le.png'}),
-				LW = new StationIcon({iconUrl: './images/lw.png'}),
-				MI = new StationIcon({iconUrl: './images/mi.png'}),
-				RH = new StationIcon({iconUrl: './images/rh.png'}),
-				ST = new StationIcon({iconUrl: './images/st.png'}),
-				ANS = new StationIcon({iconUrl: './images/ans.png'})
+	var UN = new StationIcon({iconUrl: './images/un.png'}),
+		BR = new StationIcon({iconUrl: './images/br.png'}),
+		KI = new StationIcon({iconUrl: './images/ki.png'}),
+		LE = new StationIcon({iconUrl: './images/le.png'}),
+		LW = new StationIcon({iconUrl: './images/lw.png'}),
+		MI = new StationIcon({iconUrl: './images/mi.png'}),
+		RH = new StationIcon({iconUrl: './images/rh.png'}),
+		ST = new StationIcon({iconUrl: './images/st.png'}),
+		ANS = new StationIcon({iconUrl: './images/ans.png'})
 
-			// L.marker([43.6445277,-79.38014814], {icon: ANS}).addTo(map).bindPopup("I am a green leaf.");
+	// L.marker([43.6445277,-79.38014814], {icon: ANS}).addTo(map).bindPopup("I am a green leaf.");
 </script>
 
 
