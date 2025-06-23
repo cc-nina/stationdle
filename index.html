@@ -267,16 +267,12 @@
 
 			const xcoord = coord[0].point_x
 			const ycoord = coord[0].point_y
-			console.log(xcoord)
-			console.log(ycoord)
+			// console.log(xcoord)
+			// console.log(ycoord)
 
-			console.log("horse2")
+			L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
+
         })()
-
-
-    
-
-
 	</script>
 
 <header class="topnav">
@@ -362,6 +358,26 @@
 	subdomains: 'abcd',
 	maxZoom: 20
 	}).addTo(map);
+
+	var StationIcon = L.Icon.extend({
+				options: {
+					iconSize:     [38, 38],
+					iconAnchor:   [38, 38],
+					popupAnchor:  [-19, -38]
+				}
+			});
+
+			var UN = new StationIcon({iconUrl: './images/un.png'}),
+				BR = new StationIcon({iconUrl: './images/br.png'}),
+				KI = new StationIcon({iconUrl: './images/ki.png'}),
+				LE = new StationIcon({iconUrl: './images/le.png'}),
+				LW = new StationIcon({iconUrl: './images/lw.png'}),
+				MI = new StationIcon({iconUrl: './images/mi.png'}),
+				RH = new StationIcon({iconUrl: './images/rh.png'}),
+				ST = new StationIcon({iconUrl: './images/st.png'}),
+				ANS = new StationIcon({iconUrl: './images/ans.png'})
+
+			// L.marker([43.6445277,-79.38014814], {icon: ANS}).addTo(map).bindPopup("I am a green leaf.");
 </script>
 
 
