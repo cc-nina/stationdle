@@ -218,13 +218,14 @@
 		.square {
 			height: 30px;
 			width: 30px;
-			background-color: #555;
 			border-radius: 5px;
 			justify-content: center; 
 			align-items: center;
 			display: flex;
 			font-weight: bold;
 			font-family: Helvetica;
+			margin-right: 10px;
+
 		}
 	</style>
 	<script type="text/javascript" src="darkmode.js" defer></script>
@@ -296,45 +297,21 @@
 			console.log(stations)
 			console.log(stations[0].colour)
 
-			var text = ""
-			console.log(text)
-			
 			const generatestations = document.getElementById('generatestations')
 
 			for (let i = 0; i < count; i++) {
 				const div = document.createElement('div');
-				div.textContent = '${stations[i].line_abbr}';
-				div.style.backgroundColor = '${stations[i].colour}';
 				div.className = "station";	
-				div.innerHTML = `${stations[i].stat_name}`;
+
+				const span = document.createElement('span');
+				span.className = "square";
+				span.innerHTML = `${stations[i].line_abbr}`;
+				span.style.backgroundColor = `${stations[i].colour}`;
+				div.appendChild(span)
+
+				div.innerHTML += `${stations[i].stat_name}`;
 				generatestations.appendChild(div)
-
-				//text += `<div class="station"><span class="square" style="background-color: var(--stations[i].colour)">var(--stations[i].line_abbr)</span>
-				//var(--stations[i].stat_name)</div>`
 			}
-
-			generatestations.innerHTML += text
-
-
-
-			
-			console.log(text)
-
-			// what is each thing supposed to look like
-			/*
-
-			<div class="station">
-				<span class="square" style="background-color: var(stations[i].colour)">var(stations[i].line_abbr)</span>
-				var(stations[i].stat_name)
-			</div>
-
-			this is what it currently looks like
-			<div class="station">
-					station 17
-			</div>
-
-			*/
-
 
         })()
 	</script>
@@ -354,67 +331,8 @@
 	<div class="box" id="guessing">
 		<div class="wrapped">
 			<input type="text" placeholder="🔎 Search..." class="search">
-			<div class="allstations" id="generatestations">
-				
-				<!--
-				<div class="station">
-					<span class="square">KI</span>
-					station 1
-				</div>
-				<div class="station">
-					station 2
-				</div>
-				<div class="station">
-					station 3
-				</div>
-				<div class="station">
-					station 4
-				</div>
-				<div class="station">
-					station 5
-				</div>
-				<div class="station">
-					station 6
-				</div>
-				<div class="station">
-					station 7
-				</div>
-				<div class="station">
-					station 8
-				</div>
-				<div class="station">
-					station 9
-				</div>
-				<div class="station">
-					station 10
-				</div>
-				<div class="station">
-					station 11
-				</div>
-				<div class="station">
-					station 12
-				</div>
-				<div class="station">
-					station 13
-				</div>
-				<div class="station">
-					station 14
-				</div>
-				<div class="station">
-					station 15
-				</div>
-				<div class="station">
-					station 16
-				</div>
-				<div class="station">
-					station 17
-				</div>
-				<div class="station">
-					station 18
-				</div>
-				-->
+			<div class="allstations" id="generatestations">	
 			</div>
-			
 		</div>
 	</div>
 </div>
