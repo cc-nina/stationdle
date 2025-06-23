@@ -41,7 +41,6 @@
 			--accent-color: #0071ff;
 		}
 
-		
 		#themeswitch { 
 			height: 50px;
 			width: 50px; padding: 0;
@@ -53,7 +52,6 @@
 			position: fixed;
 			top: 10px;
 			right: 10px;
-
 		}
 
 		#themeswitch svg {
@@ -78,6 +76,7 @@
 			height: 100%;
 			margin: 0;
 		}
+
 		.leaflet-container {
 			height: 100vh;
 			width: 100vw;
@@ -113,8 +112,7 @@
 			height: 30vh;
 			background-color: var(--base-variant);
 			padding-bottom: 20px;
-			padding-top: 55px;
-			
+			padding-top: 55px;		
 		}
 
 		.container {
@@ -122,6 +120,7 @@
 			flex-direction: column;
 			height: 100vh;
 		}
+
 		.box {
 			flex: 1;
 			display: flex;
@@ -139,7 +138,6 @@
 				width: 100vw;
 				overflow-x: clip;
 				overflow-y: scroll;
-				
 			}
 		}
 
@@ -163,15 +161,12 @@
 				height: 25vh;
 				width: 100vw;
 				overflow-x: clip;
-				overflow-y: scroll;
-				
+				overflow-y: scroll;			
 			}
 
 			.wrapped {
 				height: 95vh;
 			}
-
-
         }
 
 		.station {
@@ -225,7 +220,10 @@
 			font-weight: bold;
 			font-family: Helvetica;
 			margin-right: 10px;
+		}
 
+		.name {
+			height: 100%;
 		}
 	</style>
 	<script type="text/javascript" src="darkmode.js" defer></script>
@@ -240,15 +238,6 @@
   		const _supabase = createClient('https://xhtkarqvsqbdzsbpjaox.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhodGthcnF2c3FiZHpzYnBqYW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2MjMwNjcsImV4cCI6MjA2NjE5OTA2N30.TVXWNlDRTcV_AAlL1QweZtnsOQtoHpZ62eaxbEG508U');
 
 		(async () => {
-            /*
-			template
-			
-			const {data, error} = await _supabase
-			.from("gostations")
-			.select('point_x')
-
-			console.log(data)*/
-
 			const js_date = new Date()
 			
 			const year = js_date.getFullYear()
@@ -309,11 +298,29 @@
 				span.style.backgroundColor = `${stations[i].colour}`;
 				div.appendChild(span)
 
-				div.innerHTML += `${stations[i].stat_name}`;
+				const name = document.createElement('div');
+				name.innerHTML = `${stations[i].stat_name}`
+				name.className = "name"
+				div.appendChild(name)
 				generatestations.appendChild(div)
 			}
-
         })()
+
+		function filter() {
+			let input = document.getElementById('searchbar').value.toString().toLowerCase();
+			let stations = document.querySelectorAll('div.station');
+			console.log(input)
+			console.log(stations)
+
+			stations.forEach((el) => {
+				console.log(el)
+				//querySelector('station').textContent.value.toString().toLowerCase()
+				let text = el.querySelector('.name').textContent.toLowerCase();
+				console.log(text)
+				lowerstation = text.toLowerCase();
+				el.style.display = text.includes(input) ? "list-item" : "none";
+			})
+		}
 	</script>
 
 <header class="topnav">
@@ -330,9 +337,11 @@
 	<div class="box" id="map"></div>
 	<div class="box" id="guessing">
 		<div class="wrapped">
-			<input type="text" placeholder="🔎 Search..." class="search">
-			<div class="allstations" id="generatestations">	
-			</div>
+		<form>
+			<input type="text" placeholder="🔎 Search..." class="search" id="searchbar" onkeyup="filter()">
+			<div class="allstations" id="generatestations"></div>
+		</form>
+			
 		</div>
 	</div>
 </div>
