@@ -296,14 +296,26 @@
 			console.log(stations)
 			console.log(stations[0].colour)
 
-			let text = ""
-			text += "<div class="station">"
+			var text = ""
+			console.log(text)
 			
-			/**/
+			const generatestations = document.getElementById('generatestations')
+
 			for (let i = 0; i < count; i++) {
-				text += "<div class="station"><span class="square" style="background-color: var(--stations[i].colour)">var(--stations[i].line_abbr)</span>
-				var(--stations[i].stat_name)</div>"
+				const div = document.createElement('div');
+				div.textContent = '${stations[i].line_abbr}';
+				div.style.backgroundColor = '${stations[i].colour}';
+				div.className = "station";	
+				div.innerHTML = `${stations[i].stat_name}`;
+				generatestations.appendChild(div)
+
+				//text += `<div class="station"><span class="square" style="background-color: var(--stations[i].colour)">var(--stations[i].line_abbr)</span>
+				//var(--stations[i].stat_name)</div>`
 			}
+
+			generatestations.innerHTML += text
+
+
 
 			
 			console.log(text)
@@ -342,7 +354,9 @@
 	<div class="box" id="guessing">
 		<div class="wrapped">
 			<input type="text" placeholder="🔎 Search..." class="search">
-			<div class="allstations">
+			<div class="allstations" id="generatestations">
+				
+				<!--
 				<div class="station">
 					<span class="square">KI</span>
 					station 1
@@ -398,6 +412,7 @@
 				<div class="station">
 					station 18
 				</div>
+				-->
 			</div>
 			
 		</div>
