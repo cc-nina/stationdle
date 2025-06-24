@@ -24,10 +24,10 @@
 		}
 
 		:root {
-			--base-color: white;
+			--base-color: #a4d4bc;
 			--base-variant: #e8e9ed;
 			--text-color: #111528;
-			--secondary-text: #232738;
+			--secondary-text: #008741;
 			--primary-color: #3a435d;
 			--accent-color: #0071ff;
 		}
@@ -181,7 +181,11 @@
 			margin-right: 10px;
 			margin-block: 10px;
 			padding: 5px;
+		}
 
+		.station:hover {
+			background-color:hsl(0deg 0% 0% / 0.25);
+			transition-delay: 0.03s;
 		}
 
 		.search {
@@ -309,16 +313,12 @@
 		function filter() {
 			let input = document.getElementById('searchbar').value.toString().toLowerCase();
 			let stations = document.querySelectorAll('div.station');
-			console.log(input)
-			console.log(stations)
 
 			stations.forEach((el) => {
 				console.log(el)
-				//querySelector('station').textContent.value.toString().toLowerCase()
 				let text = el.querySelector('.name').textContent.toLowerCase();
-				console.log(text)
 				lowerstation = text.toLowerCase();
-				el.style.display = text.includes(input) ? "list-item" : "none";
+				el.style.display = text.includes(input) ? "flex" : "none";
 			})
 		}
 	</script>
