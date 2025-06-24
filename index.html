@@ -328,8 +328,8 @@
 			const timeout = 150
 
 			const buttons = document.querySelectorAll(".station");
-			buttons.forEach(button => {
-				button.addEventListener('click', () => {
+			buttons.forEach(async button => {
+				button.addEventListener('click', async () => {
 					var answer = ans[currentStation].stat_name
 					const guess = button.childNodes[1].innerHTML
 					if (guess === answer) {
@@ -348,11 +348,23 @@
 					record[currentStation] = guess === answer ? true : false;
 					currentStation += 1
 					if (currentStation === 5) {
-						// popup here with copyable results
-						// add coloured pins of all stations to the map and show the name
-						// add this person's results to database and display how many people got each station right
+						console.log(record)
+						
+						// add this person's results to the results database
+						const {error} = await _supabase
+						.from('results')
+						.insert({stat_1: record[0], stat_2: record[1], stat_3: record[2], stat_4: record[3], stat_5: record[4]})
+						.select()
 
-						console.log("done")
+						// hide the box of the list of stations
+						
+						// make box with results visible
+
+						// display how many people got each station right
+						
+						// add coloured pins of all stations to the map and show the name
+
+						// popup here with copyable results
 					} else {
 						xcoord = ans[currentStation].point_x
 						ycoord = ans[currentStation].point_y
