@@ -272,8 +272,6 @@
 
 			const xcoord = coord[0].point_x
 			const ycoord = coord[0].point_y
-			// console.log(xcoord)
-			// console.log(ycoord)
 
 			L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
 
@@ -281,16 +279,29 @@
 			.from('gostations')
 			.select('*', { count: 'exact', head: true })
 
-			console.log(count)
-
 			const {data: stations, err_stations} = await _supabase
 			.from('gostations')
 			.select('colour, line_abbr, stat_name')
 
-			console.log(stations)
-			console.log(stations[0].colour)
-
 			const generatestations = document.getElementById('generatestations')
+
+			function checkGuess(stationname) {
+				console.log("horse")
+				console.log(stationname)
+				// should not be running when the div is made
+				// not working on click
+				/*stationname = stationname.toString()
+				console.log(stationname)
+				
+				const {data: guess, err_guess} = _supabase
+				.from('gostations')
+				.select('id, stat_name, line_abbr, point_x, point_y')
+				.eq('stat_name', stationname)
+
+				guess_number = guess.toString()
+				console.log(guess)*/
+			}
+
 
 			for (let i = 0; i < count; i++) {
 				const div = document.createElement('div');
@@ -305,6 +316,10 @@
 				const name = document.createElement('div');
 				name.innerHTML = `${stations[i].stat_name}`
 				name.className = "name"
+				// the issue is probably here
+				// do the add event listener somewhere
+				div.onclick = checkGuess(`${name.innerHTML}`);
+				{(e) => checkGuess(e)}
 				div.appendChild(name)
 				generatestations.appendChild(div)
 			}
@@ -315,7 +330,6 @@
 			let stations = document.querySelectorAll('div.station');
 
 			stations.forEach((el) => {
-				console.log(el)
 				let text = el.querySelector('.name').textContent.toLowerCase();
 				lowerstation = text.toLowerCase();
 				el.style.display = text.includes(input) ? "flex" : "none";
