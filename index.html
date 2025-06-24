@@ -185,7 +185,15 @@
 
 		.station:hover {
 			background-color:hsl(0deg 0% 0% / 0.25);
-			transition-delay: 0.03s;
+			transition-delay: 0.01s;
+		}
+
+		.station.correct {
+			background-color: green;
+		}
+
+		.station.wrong {
+			background-color: red;
 		}
 
 		.search {
@@ -224,6 +232,7 @@
 			font-weight: bold;
 			font-family: Helvetica;
 			margin-right: 10px;
+			color: (--base-color);
 		}
 
 		.name {
@@ -231,10 +240,8 @@
 		}
 	</style>
 	<script type="text/javascript" src="darkmode.js" defer></script>
-	<!--<script type="text/javascript" src="script.js" defer></script>-->
-	
-	
 </head>
+
 <body class="darkmode">
 	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 	<script>
@@ -318,33 +325,41 @@
 
 			var record = [false, false, false, false, false]
 
+			const timeout = 200
+
 			const buttons = document.querySelectorAll(".station");
 			buttons.forEach(button => {
 				button.addEventListener('click', () => {
 					var answer = ans[currentStation].stat_name
 					const guess = button.childNodes[1].innerHTML
-					button.style.backgroundColor = guess === answer ? "green" : "red";
+					if (guess === answer) {
+						button.classList.add("correct");
+						setTimeout(() => {
+							button.classList.remove("correct");
+						}, timeout);
+					} else {
+						button.classList.add("wrong");
+						setTimeout(() => {
+							button.classList.remove("wrong");
+						}, timeout);
+					}
+					//button.style.backgroundColor = guess === answer ? "green" : "red";
 					// maybe make the red a tempmorary animation
 					record[currentStation] = guess === answer ? true : false;
 					currentStation += 1
 					if (currentStation === 5) {
 						// popup here with copyable results
+						// add coloured pins of all stations to the map and show the name
 						console.log("done")
 					} else {
-						
 						xcoord = ans[currentStation].point_x
 						ycoord = ans[currentStation].point_y
-
-						marker.setLatLng([ycoord, xcoord])
+						setTimeout(() => {
+							marker.setLatLng([ycoord, xcoord])
+						}, timeout);
 					}
-					
-					
-					
-					
-					
 					})
 			})
-
         })()
 
 		function filter() {
@@ -390,17 +405,13 @@
 	maxZoom: 20
 	})
 
-	var light_tile = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	var light_tile = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 	subdomains: 'abcd',
 	maxZoom: 20
 	})
 
 	dark_tile.addTo(map)
-
-
-	// https://github.com/CartoDB/basemap-styles?tab=readme-ov-file
-	// change based on light or dark
 
 	var StationIcon = L.Icon.extend({
 				options: {
@@ -419,8 +430,6 @@
 		RH = new StationIcon({iconUrl: './images/rh.png'}),
 		ST = new StationIcon({iconUrl: './images/st.png'}),
 		ANS = new StationIcon({iconUrl: './images/ans.png'})
-
-	// L.marker([43.6445277,-79.38014814], {icon: ANS}).addTo(map).bindPopup("I am a green leaf.");
 </script>
 </body>
 </html>
