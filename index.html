@@ -263,17 +263,28 @@
 
 			const {data:num, err_num} = await _supabase
 			.from('answers')
-			.select('station_id').eq('date', date)
+			.select('stat_1, stat_2, stat_3, stat_4, stat_5').eq('date', date)
+
+			console.log(num)
+
+			const stat_1 = num[0].stat_1
+			const stat_2 = num[0].stat_2
+			const stat_3 = num[0].stat_3
+			const stat_4 = num[0].stat_4
+			const stat_5 = num[0].stat_5
 			
 			const {data:ans, err_ans} = await _supabase
 			.from('gostations')
 			.select('stat_name, point_x, point_y')
-			.eq('id', num[0].station_id)
+			.in('id', [stat_1, stat_2, stat_3, stat_4, stat_5])
+			console.log(ans)
 
-			const xcoord = ans[0].point_x
-			const ycoord = ans[0].point_y
+			var currentStation = 0
 
-			L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
+			var xcoord = ans[currentStation].point_x
+			var ycoord = ans[currentStation].point_y
+
+			var marker = L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
 
 			const {count, error} = await _supabase
 			.from('gostations')
@@ -303,32 +314,34 @@
 				generatestations.appendChild(div)
 			}
 
-			var guessCount = 0
-			var won = false
+			
+
+			var record = [false, false, false, false, false]
 
 			const buttons = document.querySelectorAll(".station");
 			buttons.forEach(button => {
 				button.addEventListener('click', () => {
-					if (!won && guessCount < 5) {
-						guess = button.childNodes[1].innerHTML
-						answer = ans[0].stat_name
-						button.style.backgroundColor = guess === answer ? "green" : "red";
-						won = guess === answer ? true : false;
-						guessCount += 1
-						if (won) {
-							console.log("you won")
-							// popup with results
-						}
-						if (guessCount === 5 && !won) {
-							console.log("you lost")
-							// different popup with results
-						}
-						else if (guessCount < 5 && !won) {
-							// add wrong guess to map
-							// call database here?
-							// L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
-						}
+
+					var answer = ans[currentStation].stat_name
+					const guess = button.childNodes[1].innerHTML
+					button.style.backgroundColor = guess === answer ? "green" : "red";
+					// maybe make the red a tempmorary animation
+					record[currentStation] = guess === answer ? true : false;
+					currentStation += 1
+					if (currentStation === 5) {
+						// popup here with copyable results
+						console.log("done")
+					} else {
+						
+						xcoord = ans[currentStation].point_x
+						ycoord = ans[currentStation].point_y
+
+						marker.setLatLng([ycoord, xcoord])
 					}
+					
+					
+					
+					
 					
 					})
 			})
