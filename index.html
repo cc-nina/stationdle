@@ -269,7 +269,6 @@
 			.from('gostations')
 			.select('stat_name, point_x, point_y')
 			.eq('id', num[0].station_id)
-			console.log(ans)
 
 			const xcoord = ans[0].point_x
 			const ycoord = ans[0].point_y
@@ -299,25 +298,38 @@
 				const name = document.createElement('div');
 				name.innerHTML = `${stations[i].stat_name}`
 				name.className = "name"
-				// the issue is probably here
-				// do the add event listener somewhere
-				//.onclick = checkGuess(`${name.innerHTML}`);
-				//{(e) => checkGuess(e)}
 				div.appendChild(name)
 				generatestations.appendChild(div)
 			}
+
+			var guessCount = 0
+			var won = false
+
 			const buttons = document.querySelectorAll(".station");
 			buttons.forEach(button => {
 				button.addEventListener('click', () => {
-					guess = button.childNodes[1].innerHTML
-					answer = ans[0].stat_name
-					button.style.backgroundColor = guess === answer ? "green" : "red";
-					// increment guess counter
-
-					// add wrong guess to map
-					// call database here?
-					// L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
-				})
+					if (!won && guessCount < 5) {
+						guess = button.childNodes[1].innerHTML
+						answer = ans[0].stat_name
+						button.style.backgroundColor = guess === answer ? "green" : "red";
+						won = guess === answer ? true : false;
+						guessCount += 1
+						if (won) {
+							console.log("you won")
+							// popup with results
+						}
+						if (guessCount === 5 && !won) {
+							console.log("you lost")
+							// different popup with results
+						}
+						else if (guessCount < 5 && !won) {
+							// add wrong guess to map
+							// call database here?
+							// L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
+						}
+					}
+					
+					})
 			})
 
         })()
