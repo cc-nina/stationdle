@@ -261,17 +261,18 @@
 
 			const date = year_string + '-' + month_string + '-' + day_string
 
-			const {data:ans, ans_today} = await _supabase
+			const {data:num, err_num} = await _supabase
 			.from('answers')
 			.select('station_id').eq('date', date)
-
-			const {data: coord, err_coord} = await _supabase
+			
+			const {data:ans, err_ans} = await _supabase
 			.from('gostations')
-			.select('point_x, point_y')
-			.eq('id', ans[0].station_id)
+			.select('stat_name, point_x, point_y')
+			.eq('id', num[0].station_id)
+			console.log(ans)
 
-			const xcoord = coord[0].point_x
-			const ycoord = coord[0].point_y
+			const xcoord = ans[0].point_x
+			const ycoord = ans[0].point_y
 
 			L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
 
@@ -284,24 +285,6 @@
 			.select('colour, line_abbr, stat_name')
 
 			const generatestations = document.getElementById('generatestations')
-
-			function checkGuess(stationname) {
-				console.log("horse")
-				console.log(stationname)
-				// should not be running when the div is made
-				// not working on click
-				/*stationname = stationname.toString()
-				console.log(stationname)
-				
-				const {data: guess, err_guess} = _supabase
-				.from('gostations')
-				.select('id, stat_name, line_abbr, point_x, point_y')
-				.eq('stat_name', stationname)
-
-				guess_number = guess.toString()
-				console.log(guess)*/
-			}
-
 
 			for (let i = 0; i < count; i++) {
 				const div = document.createElement('div');
@@ -318,11 +301,25 @@
 				name.className = "name"
 				// the issue is probably here
 				// do the add event listener somewhere
-				div.onclick = checkGuess(`${name.innerHTML}`);
-				{(e) => checkGuess(e)}
+				//.onclick = checkGuess(`${name.innerHTML}`);
+				//{(e) => checkGuess(e)}
 				div.appendChild(name)
 				generatestations.appendChild(div)
 			}
+			const buttons = document.querySelectorAll(".station");
+			buttons.forEach(button => {
+				button.addEventListener('click', () => {
+					guess = button.childNodes[1].innerHTML
+					answer = ans[0].stat_name
+					button.style.backgroundColor = guess === answer ? "green" : "red";
+					// increment guess counter
+
+					// add wrong guess to map
+					// call database here?
+					// L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
+				})
+			})
+
         })()
 
 		function filter() {
@@ -388,8 +385,5 @@
 
 	// L.marker([43.6445277,-79.38014814], {icon: ANS}).addTo(map).bindPopup("I am a green leaf.");
 </script>
-
-
-
 </body>
 </html>
