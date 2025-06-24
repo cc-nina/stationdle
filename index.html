@@ -189,11 +189,11 @@
 		}
 
 		.station.correct {
-			background-color: green;
+			background-color: #008741;
 		}
 
 		.station.wrong {
-			background-color: red;
+			background-color: rgb(221, 82, 82);
 		}
 
 		.search {
@@ -325,7 +325,7 @@
 
 			var record = [false, false, false, false, false]
 
-			const timeout = 200
+			const timeout = 150
 
 			const buttons = document.querySelectorAll(".station");
 			buttons.forEach(button => {
@@ -350,6 +350,8 @@
 					if (currentStation === 5) {
 						// popup here with copyable results
 						// add coloured pins of all stations to the map and show the name
+						// add this person's results to database and display how many people got each station right
+
 						console.log("done")
 					} else {
 						xcoord = ans[currentStation].point_x
