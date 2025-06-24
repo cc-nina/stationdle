@@ -282,6 +282,7 @@
 			const {data: stations, err_stations} = await _supabase
 			.from('gostations')
 			.select('colour, line_abbr, stat_name')
+			.order('id')
 
 			const generatestations = document.getElementById('generatestations')
 
@@ -376,6 +377,8 @@
 	subdomains: 'abcd',
 	maxZoom: 20
 	}).addTo(map);
+	// https://github.com/CartoDB/basemap-styles?tab=readme-ov-file
+	// change based on light or dark
 
 	var StationIcon = L.Icon.extend({
 				options: {
