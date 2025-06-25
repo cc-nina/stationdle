@@ -245,12 +245,7 @@
 
 
 		button {
-			background-color: var(--text-color);
-			border: 0;
 			box-shadow: 1px 4px rgba(0, 0, 0, 0.3);
-			color: #fff;
-			cursor: pointer;
-			padding: 10px 25px;
 		}
 
 		.modal {
@@ -268,10 +263,11 @@
 		}
 
 		.modal-inner { 
-			background-color: #fff;
+			background-color: var(--base-variant);
 			border-radius: 5px;
 			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 			padding: 15px 25px;
+			position: relative;
 			text-align: center;
 			width: 380px;
 		}
@@ -291,7 +287,20 @@
 		}
 
 		#closeModal {
+			height: 50px;
+			width: 50px; padding: 0;
+			border-radius: 50%;
+			background-color: var(--base-variant); 
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: absolute;
+			top: 20px;
+			right: 20px;
+		}
 
+		#closeModal svg {
+			fill: rgb(238, 162, 162)
 		}
 
 
@@ -500,7 +509,10 @@
 </header>
 <div class="modal" id="modal">
 	<div class="modal-inner" id="modal-inside">
-		<button id="closeModal">Close</button>
+		<button id="closeModal"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></button>
+		<br>
+		<br>
+		<br>
 	</div>
 </div>
 
