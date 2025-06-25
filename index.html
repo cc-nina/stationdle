@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-	
 	<style>
 		* {
 			padding: 0;
@@ -247,7 +246,6 @@
 			fill: var(--primary-color);
 		}
 
-
 		button {
 			box-shadow: 1px 4px rgba(0, 0, 0, 0.3);
 		}
@@ -273,16 +271,20 @@
 			padding: 15px 25px;
 			position: relative;
 			text-align: center;
-			width: 380px;
+			width: 50vw;
+			max-width: 400px;
 		}
 
 		.modal-inner h2 {
 			margin: 0;
+			position: relative;
+			padding: 10px 25px;
 		}
 
 		.modal-inner p {
 			line-height: 24px; 
 			margin: 10px 0;
+			position: relative;
 		}
 
 		.modal.open {
@@ -313,13 +315,6 @@
 			background-color:hsl(0deg 0% 0% / 0.25);
 			transition-delay: 0.01s;
 		}
-
-
-
-
-
-
-
 	</style>
 	<script type="text/javascript" src="darkmode.js" defer></script>
 </head>
@@ -329,6 +324,25 @@
 	<script>
 		const { createClient } = supabase
   		const _supabase = createClient('https://xhtkarqvsqbdzsbpjaox.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhodGthcnF2c3FiZHpzYnBqYW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2MjMwNjcsImV4cCI6MjA2NjE5OTA2N30.TVXWNlDRTcV_AAlL1QweZtnsOQtoHpZ62eaxbEG508U');
+		
+		const js_date = new Date()
+			
+		const year = js_date.getFullYear()
+		const year_string = year.toString()
+
+		const month = js_date.getMonth() + 1
+		let month_string = month.toString()
+		if (month < 10) {
+			month_string = '0' + month_string
+		}
+			
+		const day = js_date.getDate()
+		const day_string = day.toString()
+		if (day < 10) {
+			day_string = '0' + day_string
+		}
+
+		const date = year_string + '-' + month_string + '-' + day_string
 		function filter() {
 			let input = document.getElementById('searchbar').value.toString().toLowerCase();
 			let stations = document.querySelectorAll('div.station');
@@ -346,9 +360,9 @@
 				empty++
 				squares += "⬛"
 			}
-			console.log(squares)
 
-			var message = ""
+			var shareresults = "Stationdle "+month_string+"/"+day_string+"/"+year_string+"\n\n"+squares+"\n\nhttps://stationdle.vercel.app/"
+
 			if (win) {
 				if (win && guessnum === 1) {
 					message = "🐐 Congrats, it took you "+guessnum.toString()+" try!"
@@ -358,6 +372,8 @@
 			} else {
 				message = "💔 Better luck next time!"
 			}
+
+			const results = "Stationdle "
 
 			modal.classList.add("open")
 
@@ -374,36 +390,8 @@
 
 			modal_inside.appendChild(desc)
 			modal_inside.appendChild(square_display)
-			//^ need to make sure user can't guess more than five times after receiving results
-			// style the popup, fix spacing of close button
-				
-
-
-			console.log(squares)
-			console.log(message)
-
-
 			}
 		(async () => {
-			const js_date = new Date()
-			
-			const year = js_date.getFullYear()
-			const year_string = year.toString()
-
-			const month = js_date.getMonth() + 1
-			let month_string = month.toString()
-			if (month < 10) {
-				month_string = '0' + month_string
-			}
-				
-			const day = js_date.getDate()
-			const day_string = day.toString()
-			if (day < 10) {
-				day_string = '0' + day_string
-			}
-
-			const date = year_string + '-' + month_string + '-' + day_string
-
 			const {data:num, err_num} = await _supabase
 			.from('answers')
 			.select('station_id').eq('date', date)
@@ -414,8 +402,6 @@
 			.from('gostations')
 			.select('stat_name, line_abbr, point_x, point_y')
 			.eq('id', station_id)
-			console.log(ans)
-			console.log("horse")
 
 			const xcoord = ans[0].point_x
 			const ycoord = ans[0].point_y
@@ -435,7 +421,6 @@
 			.from('gostations')
 			.select('stat_name')
 			.eq('line_abbr', ans[0].line_abbr)
-			console.log(rightline)
 
 			const {count:linecount, err_linecount} = await _supabase
 			.from('gostations')
@@ -508,18 +493,7 @@
 						.insert({ith_guess: tries_count})
 
 						results(tries_count, guess === answer, squares)
-						// results(guessnum, win, squares)
-
-
-
-						// hide the box of the list of stations
-						// make box with results visible
-						// display how many people got each station right
-						// add coloured pins of all stations to the map and show the name
-						// popup here with copyable results
-
 					} 
-
 					})
 			})
 
