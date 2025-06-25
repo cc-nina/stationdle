@@ -238,6 +238,68 @@
 		.name {
 			height: 100%;
 		}
+
+		#themeswitch svg {
+			fill: var(--primary-color);
+		}
+
+
+		button {
+			background-color: var(--text-color);
+			border: 0;
+			box-shadow: 1px 4px rgba(0, 0, 0, 0.3);
+			color: #fff;
+			cursor: pointer;
+			padding: 10px 25px;
+		}
+
+		.modal {
+			background-color: rgba(0, 0, 0, 0.3);
+			opacity: 0;
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			transition: all 0.3s ease-in-out;
+			z-index: -1;
+			display: flex;
+			align-items: center; justify-content: center;
+		}
+
+		.modal-inner { 
+			background-color: #fff;
+			border-radius: 5px;
+			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+			padding: 15px 25px;
+			text-align: center;
+			width: 380px;
+		}
+
+		.modal-inner h2 {
+			margin: 0;
+		}
+
+		.modal-inner p {
+			line-height: 24px; 
+			margin: 10px 0;
+		}
+
+		.modal.open {
+			opacity: 1;
+			z-index: 999;
+		}
+
+		#closeModal {
+
+		}
+
+
+
+
+
+
+
 	</style>
 	<script type="text/javascript" src="darkmode.js" defer></script>
 </head>
@@ -247,7 +309,62 @@
 	<script>
 		const { createClient } = supabase
   		const _supabase = createClient('https://xhtkarqvsqbdzsbpjaox.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhodGthcnF2c3FiZHpzYnBqYW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2MjMwNjcsImV4cCI6MjA2NjE5OTA2N30.TVXWNlDRTcV_AAlL1QweZtnsOQtoHpZ62eaxbEG508U');
+		function filter() {
+						let input = document.getElementById('searchbar').value.toString().toLowerCase();
+						let stations = document.querySelectorAll('div.station');
 
+						stations.forEach((el) => {
+							let text = el.querySelector('.name').textContent.toLowerCase();
+							lowerstation = text.toLowerCase();
+							el.style.display = text.includes(input) ? "flex" : "none";
+						})
+					}
+			
+		function results(guessnum, win) {
+			var squares = ""
+			const green_square = "🟩"
+			const red_square = "🟥"
+			const black_square = "⬛"
+
+			var message = ""
+			if (win) {
+				if (win && guessnum === 1) {
+					squares = "🟩"
+					message = "🐐 Congrats, it took you "+guessnum.toString()+" try!"
+				} else {
+					const wrong = guessnum - 1
+					const left = 5 - guessnum
+					squares = red_square.repeat(wrong)+green_square+black_square.repeat(left)
+					message = "🎊 Congrats, it took you "+guessnum.toString()+" tries!"
+				} 
+			} else {
+				squares = red_square.repeat(5)
+				message = "💔 Better luck next time!"
+			}
+
+			modal.classList.add("open")
+
+			const modal_inside = document.getElementById("modal-inside")
+
+			const desc = document.createElement('h2');
+			// desc.className = ""
+			desc.innerHTML = message
+			
+
+			const square_display = document.createElement('p')
+			// square_display.className = ""
+			square_display.innerHTML = squares
+
+			modal_inside.appendChild(desc)
+			modal_inside.appendChild(square_display)
+				
+
+
+			console.log(squares)
+			console.log(message)
+
+
+			}
 		(async () => {
 			const js_date = new Date()
 			
@@ -270,26 +387,18 @@
 
 			const {data:num, err_num} = await _supabase
 			.from('answers')
-			.select('stat_1, stat_2, stat_3, stat_4, stat_5').eq('date', date)
+			.select('station_id').eq('date', date)
 
-			console.log(num)
-
-			const stat_1 = num[0].stat_1
-			const stat_2 = num[0].stat_2
-			const stat_3 = num[0].stat_3
-			const stat_4 = num[0].stat_4
-			const stat_5 = num[0].stat_5
+			const station_id = num[0].station_id
 			
 			const {data:ans, err_ans} = await _supabase
 			.from('gostations')
 			.select('stat_name, point_x, point_y')
-			.in('id', [stat_1, stat_2, stat_3, stat_4, stat_5])
+			.eq('id', station_id)
 			console.log(ans)
 
-			var currentStation = 0
-
-			var xcoord = ans[currentStation].point_x
-			var ycoord = ans[currentStation].point_y
+			const xcoord = ans[0].point_x
+			const ycoord = ans[0].point_y
 
 			var marker = L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
 
@@ -302,7 +411,7 @@
 			.select('colour, line_abbr, stat_name')
 			.order('id')
 
-			const generatestations = document.getElementById('generatestations')
+			const generate_stations = document.getElementById('generatestations')
 
 			for (let i = 0; i < count; i++) {
 				const div = document.createElement('div');
@@ -318,19 +427,19 @@
 				name.innerHTML = `${stations[i].stat_name}`
 				name.className = "name"
 				div.appendChild(name)
-				generatestations.appendChild(div)
+				generate_stations.appendChild(div)
 			}
 
 			
 
-			var record = [false, false, false, false, false]
+			var tries_count = 0
 
 			const timeout = 150
 
 			const buttons = document.querySelectorAll(".station");
 			buttons.forEach(async button => {
 				button.addEventListener('click', async () => {
-					var answer = ans[currentStation].stat_name
+					var answer = ans[0].stat_name
 					const guess = button.childNodes[1].innerHTML
 					if (guess === answer) {
 						button.classList.add("correct");
@@ -343,49 +452,42 @@
 							button.classList.remove("wrong");
 						}, timeout);
 					}
-					//button.style.backgroundColor = guess === answer ? "green" : "red";
-					// maybe make the red a tempmorary animation
-					record[currentStation] = guess === answer ? true : false;
-					currentStation += 1
-					if (currentStation === 5) {
-						console.log(record)
+					tries_count += 1
+					if (guess === answer || tries_count === 5) {
+						if (guess != answer) {
+							tries_count = 0
+							console.log("you lost")
+						} else {
+							console.log("you won")
+						}
 						
-						// add this person's results to the results database
+						// write tries_count to the database
 						const {error} = await _supabase
-						.from('results')
-						.insert({stat_1: record[0], stat_2: record[1], stat_3: record[2], stat_4: record[3], stat_5: record[4]})
-						.select()
+						.from('stats')
+						.insert({ith_guess: tries_count})
+
+						results(tries_count, Math.ceil(tries_count/5))
+
+
 
 						// hide the box of the list of stations
-						
 						// make box with results visible
-
 						// display how many people got each station right
-						
 						// add coloured pins of all stations to the map and show the name
-
 						// popup here with copyable results
-					} else {
-						xcoord = ans[currentStation].point_x
-						ycoord = ans[currentStation].point_y
-						setTimeout(() => {
-							marker.setLatLng([ycoord, xcoord])
-						}, timeout);
-					}
+
+					} 
+
 					})
 			})
+
+			const openBtn = document.getElementById("openModal")
+			const closeBtn = document.getElementById("closeModal")
+			const modal = document.getElementById("modal")
+			
+			closeBtn.addEventListener("click", () => { modal.classList.remove("open");
+			});
         })()
-
-		function filter() {
-			let input = document.getElementById('searchbar').value.toString().toLowerCase();
-			let stations = document.querySelectorAll('div.station');
-
-			stations.forEach((el) => {
-				let text = el.querySelector('.name').textContent.toLowerCase();
-				lowerstation = text.toLowerCase();
-				el.style.display = text.includes(input) ? "flex" : "none";
-			})
-		}
 	</script>
 
 <header class="topnav">
@@ -396,6 +498,11 @@
 	</button>
   </a>
 </header>
+<div class="modal" id="modal">
+	<div class="modal-inner" id="modal-inside">
+		<button id="closeModal">Close</button>
+	</div>
+</div>
 
 
 <div class="container">
