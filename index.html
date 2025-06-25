@@ -307,6 +307,13 @@
 			fill: rgb(238, 162, 162)
 		}
 
+		.disable {
+			pointer-events: none;
+  			cursor: not-allowed;
+			background-color:hsl(0deg 0% 0% / 0.25);
+			transition-delay: 0.01s;
+		}
+
 
 
 
@@ -323,21 +330,23 @@
 		const { createClient } = supabase
   		const _supabase = createClient('https://xhtkarqvsqbdzsbpjaox.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhodGthcnF2c3FiZHpzYnBqYW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2MjMwNjcsImV4cCI6MjA2NjE5OTA2N30.TVXWNlDRTcV_AAlL1QweZtnsOQtoHpZ62eaxbEG508U');
 		function filter() {
-						let input = document.getElementById('searchbar').value.toString().toLowerCase();
-						let stations = document.querySelectorAll('div.station');
+			let input = document.getElementById('searchbar').value.toString().toLowerCase();
+			let stations = document.querySelectorAll('div.station');
 
-						stations.forEach((el) => {
-							let text = el.querySelector('.name').textContent.toLowerCase();
-							lowerstation = text.toLowerCase();
-							el.style.display = text.includes(input) ? "flex" : "none";
-						})
-					}
-			
+			stations.forEach((el) => {
+				let text = el.querySelector('.name').textContent.toLowerCase();
+				lowerstation = text.toLowerCase();
+				el.style.display = text.includes(input) ? "flex" : "none";
+			})
+		}
+
 		function results(guessnum, win, squares) {
-			while (guessnum < 5) {
-				guessnum++
+			var empty = guessnum
+			while (empty < 5) {
+				empty++
 				squares += "⬛"
 			}
+			console.log(squares)
 
 			var message = ""
 			if (win) {
@@ -476,26 +485,30 @@
 						squares += "🟩"
 					} else if (sameline.includes(guess)) {
 						button.classList.add("rightline");
+						button.classList.add("disable");
+						
 						squares += "🟨"
 					} else {
 						button.classList.add("wrong");
+						button.classList.add("disable");
 						squares += "🟥"
 					}
 					tries_count += 1
 					if (guess === answer || tries_count === 5) {
-						if (guess != answer) {
-							tries_count = 0
-							console.log("you lost")
-						} else {
-							console.log("you won")
+						for (let i = 0; i < count; i++) {
+							generate_stations.childNodes[i].classList.add("disable")
 						}
 						
+						if (guess != answer) {
+							tries_count++
+						}
 						// write tries_count to the database
 						const {error} = await _supabase
 						.from('stats')
 						.insert({ith_guess: tries_count})
 
-						results(tries_count, Math.ceil(tries_count/5), squares)
+						results(tries_count, guess === answer, squares)
+						// results(guessnum, win, squares)
 
 
 
