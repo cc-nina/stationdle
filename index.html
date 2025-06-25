@@ -193,7 +193,11 @@
 		}
 
 		.station.wrong {
-			background-color: rgb(221, 82, 82);
+			background-color: #dd5252;
+		}
+
+		.station.rightline {
+			background-color: #f0ff6a;
 		}
 
 		.search {
@@ -329,25 +333,20 @@
 						})
 					}
 			
-		function results(guessnum, win) {
-			var squares = ""
-			const green_square = "🟩"
-			const red_square = "🟥"
-			const black_square = "⬛"
+		function results(guessnum, win, squares) {
+			while (guessnum < 5) {
+				guessnum++
+				squares += "⬛"
+			}
 
 			var message = ""
 			if (win) {
 				if (win && guessnum === 1) {
-					squares = "🟩"
 					message = "🐐 Congrats, it took you "+guessnum.toString()+" try!"
 				} else {
-					const wrong = guessnum - 1
-					const left = 5 - guessnum
-					squares = red_square.repeat(wrong)+green_square+black_square.repeat(left)
 					message = "🎊 Congrats, it took you "+guessnum.toString()+" tries!"
 				} 
 			} else {
-				squares = red_square.repeat(5)
 				message = "💔 Better luck next time!"
 			}
 
@@ -404,9 +403,10 @@
 			
 			const {data:ans, err_ans} = await _supabase
 			.from('gostations')
-			.select('stat_name, point_x, point_y')
+			.select('stat_name, line_abbr, point_x, point_y')
 			.eq('id', station_id)
 			console.log(ans)
+			console.log("horse")
 
 			const xcoord = ans[0].point_x
 			const ycoord = ans[0].point_y
@@ -421,6 +421,22 @@
 			.from('gostations')
 			.select('colour, line_abbr, stat_name')
 			.order('id')
+
+			const {data: rightline, err_rightline} = await _supabase
+			.from('gostations')
+			.select('stat_name')
+			.eq('line_abbr', ans[0].line_abbr)
+			console.log(rightline)
+
+			const {count:linecount, err_linecount} = await _supabase
+			.from('gostations')
+			.select('*', { count: 'exact', head: true })
+			.eq('line_abbr', ans[0].line_abbr)
+
+			const sameline = []
+			for (let i = 0; i < linecount; ++i) {
+				sameline.push(rightline[i].stat_name)
+			}
 
 			const generate_stations = document.getElementById('generatestations')
 
@@ -441,27 +457,29 @@
 				generate_stations.appendChild(div)
 			}
 
-			
+			var wrong = 0
+			var maybe = 0
 
 			var tries_count = 0
 
 			const timeout = 150
+			var squares = ""
 
 			const buttons = document.querySelectorAll(".station");
 			buttons.forEach(async button => {
 				button.addEventListener('click', async () => {
 					var answer = ans[0].stat_name
 					const guess = button.childNodes[1].innerHTML
+
 					if (guess === answer) {
 						button.classList.add("correct");
-						setTimeout(() => {
-							button.classList.remove("correct");
-						}, timeout);
+						squares += "🟩"
+					} else if (sameline.includes(guess)) {
+						button.classList.add("rightline");
+						squares += "🟨"
 					} else {
 						button.classList.add("wrong");
-						setTimeout(() => {
-							button.classList.remove("wrong");
-						}, timeout);
+						squares += "🟥"
 					}
 					tries_count += 1
 					if (guess === answer || tries_count === 5) {
@@ -477,7 +495,7 @@
 						.from('stats')
 						.insert({ith_guess: tries_count})
 
-						results(tries_count, Math.ceil(tries_count/5))
+						results(tries_count, Math.ceil(tries_count/5), squares)
 
 
 
