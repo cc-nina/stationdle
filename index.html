@@ -525,9 +525,9 @@
 							tries_count++
 						}
 						// write tries_count to the database
-						const {error} = await _supabase
+						/*const {error} = await _supabase
 						.from('stats')
-						.insert({ith_guess: tries_count})
+						.insert({ith_guess: tries_count})*/
 
 						results(tries_count, guess === answer, squares)
 					} 
