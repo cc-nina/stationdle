@@ -537,13 +537,12 @@
 			copyBtn.addEventListener("click", () => {
 				let text = document.getElementById('copytext');
 				console.log(text.innerHTML)
-				const copyContent = async () => {
-					try {
-					await navigator.clipboard.writeText(text);
-					console.log('Content copied to clipboard');
-					} catch (err) {
-					console.log('Failed to copy: ');
-					}
+				if (navigator.clipboard) {
+					navigator.clipboard.writeText(text)
+					// add something here
+				} else {
+					// add something here
+					x = 5
 				}
 				console.log("hi brother")
 			});
