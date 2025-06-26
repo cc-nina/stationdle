@@ -272,7 +272,7 @@
 			position: relative;
 			text-align: center;
 			width: 50vw;
-			max-width: 400px;
+			max-width: 450px;
 		}
 
 		.modal-inner h2 {
@@ -300,9 +300,7 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			position: absolute;
-			top: 20px;
-			right: 20px;
+			
 		}
 
 		#closeModal svg {
@@ -314,6 +312,33 @@
   			cursor: not-allowed;
 			background-color:hsl(0deg 0% 0% / 0.25);
 			transition-delay: 0.01s;
+		}
+
+		#copy_results {
+			height: 50px;
+			width: 50px; padding: 0;
+			border-radius: 50%;
+			background-color: var(--base-variant); 
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			
+		}
+
+		#copy_results svg {
+			fill: rgb(238, 162, 162)
+		}
+
+		.xrow {
+			display: flex;
+			justify-content: flex-end;
+			padding: 10px 0px;
+		}
+
+		.copyRow {
+			display: flex;
+			justify-content: center;
+			padding: 10px 5px;
 		}
 	</style>
 	<script type="text/javascript" src="darkmode.js" defer></script>
@@ -343,6 +368,7 @@
 		}
 
 		const date = year_string + '-' + month_string + '-' + day_string
+
 		function filter() {
 			let input = document.getElementById('searchbar').value.toString().toLowerCase();
 			let stations = document.querySelectorAll('div.station');
@@ -354,6 +380,18 @@
 			})
 		}
 
+		function copyToClipboard() {
+			let text = document.getElementById('copytext').innerHTML;
+			const copyContent = async () => {
+				try {
+				await navigator.clipboard.writeText(text);
+				console.log('Content copied to clipboard');
+				} catch (err) {
+				console.error('Failed to copy: ', err);
+				}
+			}
+		}
+		
 		function results(guessnum, win, squares) {
 			var empty = guessnum
 			while (empty < 5) {
@@ -373,23 +411,23 @@
 				message = "💔 Better luck next time!"
 			}
 
-			const results = "Stationdle "
-
 			modal.classList.add("open")
 
 			const modal_inside = document.getElementById("modal-inside")
+			const copy_row = document.getElementById("copy_row")
 
 			const desc = document.createElement('h2');
-			// desc.className = ""
 			desc.innerHTML = message
 			
-
 			const square_display = document.createElement('p')
-			// square_display.className = ""
 			square_display.innerHTML = squares
 
-			modal_inside.appendChild(desc)
-			modal_inside.appendChild(square_display)
+			const tobecopied = document.createElement('h3');
+			tobecopied.id = "copytext"
+			tobecopied.innerHTML = shareresults
+			modal_inside.insertBefore(desc, copy_row)
+			modal_inside.insertBefore(tobecopied, copy_row)
+			modal_inside.insertBefore(square_display, copy_row)
 			}
 		(async () => {
 			const {data:num, err_num} = await _supabase
@@ -499,10 +537,13 @@
 
 			const openBtn = document.getElementById("openModal")
 			const closeBtn = document.getElementById("closeModal")
+			const copyBtn = document.getElementById("copy_results")
 			const modal = document.getElementById("modal")
 			
 			closeBtn.addEventListener("click", () => { modal.classList.remove("open");
 			});
+
+			copyBtn.addEventListener("click", copyToClipboard());
         })()
 	</script>
 
@@ -516,10 +557,13 @@
 </header>
 <div class="modal" id="modal">
 	<div class="modal-inner" id="modal-inside">
-		<button id="closeModal"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></button>
-		<br>
-		<br>
-		<br>
+		<div class="xrow">
+			<button id="closeModal"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></button>
+		</div>
+		<div class="copyRow" id="copy_row">
+			<button id="copy_results"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"/></svg></button>
+		</div>
+		
 	</div>
 </div>
 
@@ -532,7 +576,6 @@
 			<input type="text" placeholder="🔎 Search..." class="search" id="searchbar" onkeyup="filter()">
 			<div class="allstations" id="generatestations"></div>
 		</form>
-			
 		</div>
 	</div>
 </div>
