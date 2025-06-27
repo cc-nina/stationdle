@@ -202,6 +202,7 @@
 
 		.station.rightline {
 			background-color: #f0ff6a;
+			color: #111528
 		}
 
 		.search {
@@ -352,6 +353,33 @@
 		#notif {
 			padding: 10px 5px;
 		}
+
+		.answer {
+			border-radius: 7px;
+			border: 2px solid var(--secondary-text);
+			background-color:var(--base-variant);
+			border-style: solid;
+			display: flex;
+			align-items: center;
+			white-space: nowrap;
+			justify-content: center;
+			margin-right: 10px;
+			margin-block: 10px;
+			padding: 5px;
+			max-width: fit-content;
+
+		}
+
+		.revealans {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		h4 {
+			padding: 7px;
+		}
+
 	</style>
 	<script type="text/javascript" src="darkmode.js" defer></script>
 </head>
@@ -359,202 +387,7 @@
 <body class="darkmode">
 	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 	<script>
-		const { createClient } = supabase
-  		const _supabase = createClient('https://xhtkarqvsqbdzsbpjaox.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhodGthcnF2c3FiZHpzYnBqYW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2MjMwNjcsImV4cCI6MjA2NjE5OTA2N30.TVXWNlDRTcV_AAlL1QweZtnsOQtoHpZ62eaxbEG508U');
 		
-		const js_date = new Date()
-			
-		const year = js_date.getFullYear()
-		const year_string = year.toString()
-
-		const month = js_date.getMonth() + 1
-		let month_string = month.toString()
-		if (month < 10) {
-			month_string = '0' + month_string
-		}
-			
-		const day = js_date.getDate()
-		const day_string = day.toString()
-		if (day < 10) {
-			day_string = '0' + day_string
-		}
-
-		const date = year_string + '-' + month_string + '-' + day_string
-
-		function filter() {
-			let input = document.getElementById('searchbar').value.toString().toLowerCase();
-			let stations = document.querySelectorAll('div.station');
-
-			stations.forEach((el) => {
-				let text = el.querySelector('.name').textContent.toLowerCase();
-				lowerstation = text.toLowerCase();
-				el.style.display = text.includes(input) ? "flex" : "none";
-			})
-		}
-		
-		function results(guessnum, win, squares) {
-			var empty = guessnum
-			while (empty < 5) {
-				empty++
-				squares += "⬛"
-			}
-
-			var shareresults = "Stationdle "+month_string+"/"+day_string+"/"+year_string+"\n\n"+squares+"\n\nhttps://stationdle.vercel.app/"
-
-			if (win) {
-				if (win && guessnum === 1) {
-					message = "🐐 Congrats, it took you "+guessnum.toString()+" try!"
-				} else {
-					message = "🎊 Congrats, it took you "+guessnum.toString()+" tries!"
-				} 
-			} else {
-				message = "💔 Better luck next time!"
-			}
-
-			modal.classList.add("open")
-
-			const modal_inside = document.getElementById("modal-inside")
-			const copy_row = document.getElementById("copy_row")
-
-			const desc = document.createElement('h2');
-			desc.innerHTML = message
-			
-			const square_display = document.createElement('p')
-			square_display.innerHTML = squares
-
-			const tobecopied = document.getElementById('copytext');
-			tobecopied.innerHTML = shareresults
-			modal_inside.insertBefore(desc, copy_row)
-			modal_inside.insertBefore(tobecopied, copy_row)
-			modal_inside.insertBefore(square_display, copy_row)
-			}
-		(async () => {
-			const {data:num, err_num} = await _supabase
-			.from('answers')
-			.select('station_id').eq('date', date)
-
-			const station_id = num[0].station_id
-			
-			const {data:ans, err_ans} = await _supabase
-			.from('gostations')
-			.select('stat_name, line_abbr, point_x, point_y')
-			.eq('id', station_id)
-
-			const xcoord = ans[0].point_x
-			const ycoord = ans[0].point_y
-
-			var marker = L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
-
-			const {count, error} = await _supabase
-			.from('gostations')
-			.select('*', { count: 'exact', head: true })
-
-			const {data: stations, err_stations} = await _supabase
-			.from('gostations')
-			.select('colour, line_abbr, stat_name')
-			.order('id')
-
-			const {data: rightline, err_rightline} = await _supabase
-			.from('gostations')
-			.select('stat_name')
-			.eq('line_abbr', ans[0].line_abbr)
-
-			const {count:linecount, err_linecount} = await _supabase
-			.from('gostations')
-			.select('*', { count: 'exact', head: true })
-			.eq('line_abbr', ans[0].line_abbr)
-
-			const sameline = []
-			for (let i = 0; i < linecount; ++i) {
-				sameline.push(rightline[i].stat_name)
-			}
-
-			const generate_stations = document.getElementById('generatestations')
-
-			for (let i = 0; i < count; i++) {
-				const div = document.createElement('div');
-				div.className = "station";	
-
-				const span = document.createElement('span');
-				span.className = "square";
-				span.innerHTML = `${stations[i].line_abbr}`;
-				span.style.backgroundColor = `${stations[i].colour}`;
-				div.appendChild(span)
-
-				const name = document.createElement('div');
-				name.innerHTML = `${stations[i].stat_name}`
-				name.className = "name"
-				div.appendChild(name)
-				generate_stations.appendChild(div)
-			}
-
-			var wrong = 0
-			var maybe = 0
-
-			var tries_count = 0
-
-			const timeout = 150
-			var squares = ""
-
-			const buttons = document.querySelectorAll(".station");
-			buttons.forEach(async button => {
-				button.addEventListener('click', async () => {
-					var answer = ans[0].stat_name
-					const guess = button.childNodes[1].innerHTML
-
-					if (guess === answer) {
-						button.classList.add("correct");
-						squares += "🟩"
-					} else if (sameline.includes(guess)) {
-						button.classList.add("rightline");
-						button.classList.add("disable");
-						
-						squares += "🟨"
-					} else {
-						button.classList.add("wrong");
-						button.classList.add("disable");
-						squares += "🟥"
-					}
-					tries_count += 1
-					if (guess === answer || tries_count === 5) {
-						for (let i = 0; i < count; i++) {
-							generate_stations.childNodes[i].classList.add("disable")
-						}
-						
-						if (guess != answer) {
-							tries_count++
-						}
-						// write tries_count to the database
-						/*const {error} = await _supabase
-						.from('stats')
-						.insert({ith_guess: tries_count})*/
-
-						results(tries_count, guess === answer, squares)
-					} 
-					})
-			})
-
-			const openBtn = document.getElementById("openModal")
-			const closeBtn = document.getElementById("closeModal")
-			const copyBtn = document.getElementById("copy_results")
-			const modal = document.getElementById("modal")
-			
-			closeBtn.addEventListener("click", () => { modal.classList.remove("open");
-			});
-
-			copyBtn.addEventListener("click", () => {
-				let text = document.getElementById('copytext');
-				const notif = document.getElementById('notif')
-				navigator.clipboard
-				.writeText(text.innerHTML)
-				.then(() => {
-					notif.innerHTML = "Copied!"
-				})
-				.catch(() => {
-					notif.innerHTML = "Failed to copy!"
-				});
-			});
-        })()
 	</script>
 
 <header class="topnav">
@@ -576,8 +409,6 @@
 			<button id="copy_results"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"/></svg></button>
 		</div>
 		<h3 id="notif"></h3>
-
-		
 	</div>
 </div>
 
@@ -595,7 +426,243 @@
 </div>
 
 <script>
-	const map = L.map('map').setView([43.937208, -79.408278], 8);    
+	const { createClient } = supabase
+	const _supabase = createClient('https://xhtkarqvsqbdzsbpjaox.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhodGthcnF2c3FiZHpzYnBqYW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2MjMwNjcsImV4cCI6MjA2NjE5OTA2N30.TVXWNlDRTcV_AAlL1QweZtnsOQtoHpZ62eaxbEG508U');
+	
+	const js_date = new Date()
+		
+	const year = js_date.getFullYear()
+	const year_string = year.toString()
+
+	const month = js_date.getMonth() + 1
+	let month_string = month.toString()
+	if (month < 10) {
+		month_string = '0' + month_string
+	}
+		
+	const day = js_date.getDate()
+	const day_string = day.toString()
+	if (day < 10) {
+		day_string = '0' + day_string
+	}
+
+	const date = year_string + '-' + month_string + '-' + day_string
+
+	function filter() {
+		let input = document.getElementById('searchbar').value.toString().toLowerCase();
+		let stations = document.querySelectorAll('div.station');
+
+		stations.forEach((el) => {
+			let text = el.querySelector('.name').textContent.toLowerCase();
+			lowerstation = text.toLowerCase();
+			el.style.display = text.includes(input) ? "flex" : "none";
+		})
+	}
+	
+	function results(guessnum, win, squares, colour, line, stat_name) {
+		document.getElementsByClassName('leaflet-control-attribution' )[0].style.display = 'none';
+
+		var empty = guessnum
+		while (empty < 5) {
+			empty++
+			squares += "⬛"
+		}
+
+		var shareresults = "Stationdle "+month_string+"/"+day_string+"/"+year_string+"\n\n"+squares+"\n\nhttps://stationdle.vercel.app/"
+
+		if (win) {
+			if (win && guessnum === 1) {
+				message = "🐐 Congrats, it took you "+guessnum.toString()+" try!"
+			} else {
+				message = "🎊 Congrats, it took you "+guessnum.toString()+" tries!"
+			} 
+		} else {
+			message = "💔 Better luck next time!"
+		}
+
+		modal.classList.add("open")
+
+		const modal_inside = document.getElementById("modal-inside")
+		const copy_row = document.getElementById("copy_row")
+
+		const desc = document.createElement('h2');
+		desc.innerHTML = message
+		
+		const square_display = document.createElement('p')
+		square_display.innerHTML = squares
+
+		const tobecopied = document.getElementById('copytext');
+		tobecopied.innerHTML = shareresults
+		modal_inside.insertBefore(desc, copy_row)
+		modal_inside.insertBefore(tobecopied, copy_row)
+		modal_inside.insertBefore(square_display, copy_row)
+
+		if (!win) {
+
+			const revealans = document.createElement('div')
+			revealans.className = "revealans"
+
+			const answerwas = document.createElement("h4")
+			answerwas.innerHTML = "The answer was:"
+
+			const div = document.createElement('div');
+			div.className = "answer"
+
+			const span = document.createElement('span');
+			span.className = "square";
+			span.innerHTML = line;
+			span.style.backgroundColor = colour;
+			div.appendChild(span)
+
+			const name = document.createElement('div');
+			name.innerHTML = stat_name
+			name.className = "name"
+			div.appendChild(name)
+
+			revealans.appendChild(answerwas)
+			revealans.appendChild(div)
+			
+			console.log(div)
+			modal_inside.insertBefore(revealans, copy_row)
+
+		}
+		}
+	(async () => {
+		const {data:num, err_num} = await _supabase
+		.from('answers')
+		.select('station_id').eq('date', date)
+
+		const station_id = num[0].station_id
+		
+		const {data:ans, err_ans} = await _supabase
+		.from('gostations')
+		.select('stat_name, line_abbr, point_x, point_y, colour')
+		.eq('id', station_id)
+
+		const xcoord = ans[0].point_x
+		const ycoord = ans[0].point_y
+
+		var marker = L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
+
+		const {count, error} = await _supabase
+		.from('gostations')
+		.select('*', { count: 'exact', head: true })
+
+		const {data: stations, err_stations} = await _supabase
+		.from('gostations')
+		.select('colour, line_abbr, stat_name')
+		.order('id')
+
+		const {data: rightline, err_rightline} = await _supabase
+		.from('gostations')
+		.select('stat_name')
+		.eq('line_abbr', ans[0].line_abbr)
+
+		const {count:linecount, err_linecount} = await _supabase
+		.from('gostations')
+		.select('*', { count: 'exact', head: true })
+		.eq('line_abbr', ans[0].line_abbr)
+
+		const sameline = []
+		for (let i = 0; i < linecount; ++i) {
+			sameline.push(rightline[i].stat_name)
+		}
+
+		const generate_stations = document.getElementById('generatestations')
+
+		for (let i = 0; i < count; i++) {
+			const div = document.createElement('div');
+			div.className = "station";	
+
+			const span = document.createElement('span');
+			span.className = "square";
+			span.innerHTML = `${stations[i].line_abbr}`;
+			span.style.backgroundColor = `${stations[i].colour}`;
+			div.appendChild(span)
+
+			const name = document.createElement('div');
+			name.innerHTML = `${stations[i].stat_name}`
+			name.className = "name"
+			div.appendChild(name)
+			generate_stations.appendChild(div)
+		}
+
+		var wrong = 0
+		var maybe = 0
+
+		var tries_count = 0
+
+		const timeout = 150
+		var squares = ""
+
+		const buttons = document.querySelectorAll(".station");
+		buttons.forEach(async button => {
+			button.addEventListener('click', async () => {
+				var answer = ans[0].stat_name
+				const guess = button.childNodes[1].innerHTML
+
+				if (guess === answer) {
+					button.classList.add("correct");
+					squares += "🟩"
+				} else if (sameline.includes(guess)) {
+					button.classList.add("rightline");
+					button.classList.add("disable");
+					
+					squares += "🟨"
+				} else {
+					button.classList.add("wrong");
+					button.classList.add("disable");
+					squares += "🟥"
+				}
+				tries_count += 1
+				if (guess === answer || tries_count === 5) {
+					for (let i = 0; i < count; i++) {
+						generate_stations.childNodes[i].classList.add("disable")
+					}
+					
+					if (guess != answer) {
+						tries_count++
+					}
+					// write tries_count to the database
+					/*const {error} = await _supabase
+					.from('stats')
+					.insert({ith_guess: tries_count})*/
+
+					results(tries_count, guess === answer, squares, ans[0].colour, ans[0].line_abbr, ans[0].stat_name)
+				} 
+				})
+		})
+
+		const openBtn = document.getElementById("openModal")
+		const closeBtn = document.getElementById("closeModal")
+		const copyBtn = document.getElementById("copy_results")
+		const modal = document.getElementById("modal")
+		
+		closeBtn.addEventListener("click", () => { 
+			document.getElementsByClassName( 'leaflet-control-attribution' )[0].style.display = 'block';
+			modal.classList.remove("open");
+		});
+
+		copyBtn.addEventListener("click", () => {
+			let text = document.getElementById('copytext');
+			const notif = document.getElementById('notif')
+			navigator.clipboard
+			.writeText(text.innerHTML)
+			.then(() => {
+				notif.innerHTML = "Copied!"
+			})
+			.catch(() => {
+				notif.innerHTML = "Failed to copy!"
+			});
+		});
+	})()
+	
+	const map = L.map('map'); 
+	map.setZoom(8) 
+		map.fitBounds([
+		[43.1088, -80.4933],
+		[44.3747, -78.88609125]]);
+
 	var dark_tile = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 	subdomains: 'abcd',
