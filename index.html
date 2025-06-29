@@ -542,6 +542,8 @@
 		const xcoord = ans[0].point_x
 		const ycoord = ans[0].point_y
 
+		map.setView(new L.LatLng(ycoord, xcoord), 8);
+
 		var marker = L.marker([ycoord, xcoord], {icon: ANS}).addTo(map).bindPopup("What station is this?");
 
 		const {count, error} = await _supabase
@@ -659,9 +661,6 @@
 	
 	const map = L.map('map'); 
 	map.setZoom(8) 
-		map.fitBounds([
-		[43.1088, -80.4933],
-		[44.3747, -78.88609125]]);
 
 	var dark_tile = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
