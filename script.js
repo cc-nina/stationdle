@@ -114,15 +114,15 @@ function results(guessnum, win, squares, ans, guesses) {
     const square_display = document.createElement('p')
     square_display.innerHTML = squares
 
-    const tobecopied = document.getElementById('copytext');
+    const tobecopied = document.getElementById('copyText');
     tobecopied.innerHTML = shareresults
     modal_inside.insertBefore(desc, copy_row)
     modal_inside.insertBefore(tobecopied, copy_row)
     modal_inside.insertBefore(square_display, copy_row)
 
     if (!win) {
-        const revealans = document.createElement('div')
-        revealans.className = "revealans"
+        const revealAns = document.createElement('div')
+        revealAns.className = "revealAns"
 
         const answerwas = document.createElement("h4")
         answerwas.innerHTML = "The answer was:"
@@ -141,10 +141,10 @@ function results(guessnum, win, squares, ans, guesses) {
         name.className = "name"
         div.appendChild(name)
 
-        revealans.appendChild(answerwas)
-        revealans.appendChild(div)
+        revealAns.appendChild(answerwas)
+        revealAns.appendChild(div)
         
-        modal_inside.insertBefore(revealans, copy_row)
+        modal_inside.insertBefore(revealAns, copy_row)
     }
     }
 (async () => {
@@ -210,9 +210,6 @@ function results(guessnum, win, squares, ans, guesses) {
         generate_stations.appendChild(div)
     }
 
-    var wrong = 0
-    var maybe = 0
-
     var tries_count = 0
 
     const timeout = 150
@@ -250,7 +247,6 @@ function results(guessnum, win, squares, ans, guesses) {
                     tries_count++
                 }
                 // write tries_count to the database
-                
                 const {error} = await _supabase
                 .from('statistics')
                 .insert({ith_guess: tries_count, answer: ans[0].stat_name})
@@ -267,7 +263,7 @@ function results(guessnum, win, squares, ans, guesses) {
 
     const openBtn = document.getElementById("openModal")
     const closeBtn = document.getElementById("closeModal")
-    const copyBtn = document.getElementById("copy_results")
+    const copyBtn = document.getElementById("copyResults")
     const modal = document.getElementById("modal")
     
     closeBtn.addEventListener("click", () => { 
@@ -276,7 +272,7 @@ function results(guessnum, win, squares, ans, guesses) {
     });
 
     copyBtn.addEventListener("click", () => {
-        let text = document.getElementById('copytext');
+        let text = document.getElementById('copyText');
         const notif = document.getElementById('notif')
         navigator.clipboard
         .writeText(text.innerHTML)
@@ -332,7 +328,3 @@ var StationIcon = L.Icon.extend({
         });
 
 var ANS = new StationIcon({iconUrl: './images/ans.png'})
-
-
-
-

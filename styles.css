@@ -280,7 +280,7 @@ button {
 .modal-inner h2 {
     margin: 0;
     position: relative;
-    padding: 10px 25px;
+    padding: 5px 25px;
 }
 
 .modal-inner p {
@@ -316,7 +316,7 @@ button {
     transition-delay: 0.01s;
 }
 
-#copy_results {
+#copyResults {
     height: 50px;
     width: 50px; padding: 0;
     border-radius: 50%;
@@ -327,7 +327,7 @@ button {
     
 }
 
-#copy_results svg {
+#copyResults svg {
     fill: rgb(238, 162, 162)
 }
 
@@ -343,12 +343,13 @@ button {
     padding: 10px 5px;
 }
 
-#copytext {
+#copyText {
     display: none;
+    padding-bottom: 10px;
 }
 
 #notif {
-    padding: 10px 5px;
+    padding-bottom: 10px;
 }
 
 .answer {
@@ -366,7 +367,7 @@ button {
     max-width: fit-content;
 }
 
-.revealans {
+.revealAns {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -377,6 +378,6 @@ h4 {
 }
 
 .resultsPadding {
-    padding-top: 15px;
-    margin-bottom: -10px;
+    padding-top: 5px;
+    padding-bottom: 10px;
 }
