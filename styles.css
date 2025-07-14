@@ -236,7 +236,7 @@ body {
     font-weight: bold;
     font-family: Helvetica;
     margin-right: 10px;
-    color: (--base-color);
+    color: #ffffff;
 }
 
 .name {

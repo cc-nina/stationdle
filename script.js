@@ -201,6 +201,7 @@ function results(guessnum, win, squares, ans, guesses) {
         span.className = "square";
         span.innerHTML = `${stations[i].line_abbr}`;
         span.style.backgroundColor = `${stations[i].colour}`;
+        span.style
         div.appendChild(span)
 
         const name = document.createElement('div');
