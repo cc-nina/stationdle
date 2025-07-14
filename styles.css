@@ -133,6 +133,14 @@ body {
         overflow-x: clip;
         overflow-y: scroll;
     }
+
+    #map {
+        margin-bottom: -10px;
+    }
+
+    #guessing {
+        margin-top: -10px;
+    }
 }
 
 @media (min-width: 768px) {
@@ -144,11 +152,13 @@ body {
     #map {
         height: 100vh;
         width: 50vw;
+        margin-right: -10px;
     }
 
     #guessing {
         height: 100vh;
         width: 50vw;
+        margin-left: -10px;
     }
 
     .allstations {
