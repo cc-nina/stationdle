@@ -13,7 +13,7 @@ html {
     --base-color: #C3C4C5;
     --base-variant: #ffffff;
     --text-color: #111528;
-    --secondary-text: #008741;
+    --secondary-text: #505050;
     --primary-color: #3a435d;
     --accent-color: #0071ff;
     --wrong-line: #787C7E;
@@ -50,7 +50,7 @@ dark mode colourblind
 --right-station: #F5793A;
 */
 
-#themeswitch { 
+#settingsBtn { 
     height: 50px;
     width: 50px; padding: 0;
     border-radius: 50%;
@@ -63,8 +63,25 @@ dark mode colourblind
     right: 10px;
 }
 
+#settingsBtn svg {
+    fill: var(--secondary-text);
+}
+
+#themeswitch { 
+    height: 50px;
+    width: 50px; padding: 0;
+    border-radius: 50%;
+    background-color: var(--base-variant); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 10px;
+    right: 60px;
+}
+
 #themeswitch svg {
-    fill: var(--primary-color);
+    fill: var(--secondary-text);
 }
 
 #themeswitch svg:last-child {
@@ -93,7 +110,7 @@ dark mode colourblind
 }
 
 #contrastswitch svg {
-    fill: var(--primary-color);
+    fill: var(--secondary-text);
 }
 
 #contrastswitch svg:last-child {
@@ -306,14 +323,6 @@ body {
     height: 100%;
 }
 
-#themeswitch svg {
-    fill: var(--primary-color);
-}
-
-#contrastswitch svg {
-    fill: var(--primary-color);
-}
-
 button {
     box-shadow: 1px 4px rgba(0, 0, 0, 0.3);
 }
@@ -447,4 +456,61 @@ h4 {
 .resultsPadding {
     padding-top: 5px;
     padding-bottom: 10px;
+}
+
+.settings {
+    background-color: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: all 0.3s ease-in-out;
+    z-index: -1;
+    display: flex;
+    align-items: center; justify-content: center;
+}
+
+.settings-inner { 
+    background-color: var(--base-variant);
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    padding: 15px 25px;
+    position: relative;
+    text-align: center;
+    width: 80vw;
+    height: 60vh;
+    overflow: scroll;
+}
+
+.settings-inner h2 {
+    margin: 0;
+    position: relative;
+    padding: 5px 25px;
+}
+
+.settings-inner p {
+    line-height: 24px; 
+    margin: 10px 0;
+    position: relative;
+}
+
+.settings.open {
+    opacity: 1;
+    z-index: 999;
+}
+
+#closesettings {
+    height: 50px;
+    width: 50px; padding: 0;
+    border-radius: 50%;
+    background-color: var(--base-variant); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#closesettings svg {
+    fill: rgb(238, 162, 162)
 }

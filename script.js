@@ -272,11 +272,23 @@ function results(guessnum, win, squares, ans, guesses) {
             })
     })
 
+    const settingsBtn = document.getElementById("settingsBtn")
+    const closeSettings = document.getElementById("closesettings")
+
+    settingsBtn.addEventListener("click", () => {
+        settings.classList.add("open")
+        document.getElementsByClassName('leaflet-control-attribution')[0].style.display = 'none';
+    })
+
+    closeSettings.addEventListener("click", () => { 
+        settings.classList.remove("open");
+    });
+    
     const openBtn = document.getElementById("openModal")
     const closeBtn = document.getElementById("closeModal")
     const copyBtn = document.getElementById("copyResults")
     const modal = document.getElementById("modal")
-    
+
     closeBtn.addEventListener("click", () => { 
         document.getElementsByClassName( 'leaflet-control-attribution' )[0].style.display = 'block';
         modal.classList.remove("open");
