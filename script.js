@@ -221,22 +221,32 @@ function results(guessnum, win, squares, ans, guesses) {
     
     buttons.forEach(async button => {
         button.addEventListener('click', async () => {
-            var answer = ans[0].stat_name
-            const guess = button.childNodes[1].innerHTML
+            var answer = ans[0].stat_name;
+            const guess = button.childNodes[1].innerHTML;
+
+            var rightSquare = "🟩";
+            var wrongSquare = "✖️";
+            var partlySquare = "🟨";
+
+            let contrast = localStorage.getItem('contrastmode');
+            if (contrast === 'active') {
+                rightSquare = "🟧";
+                partlySquare = "🟦";
+            }
 
             if (guess === answer) {
                 button.classList.add("correct");
-                squares += "🟩"
+                squares += rightSquare;
             } else if (sameline.includes(guess)) {
                 button.classList.add("rightline");
                 button.classList.add("disable");
-                squares += "🟨"
-                guesses.push(guess)
+                squares += partlySquare;
+                guesses.push(guess);
             } else {
                 button.classList.add("wrong");
                 button.classList.add("disable");
-                squares += "🟥"
-                guesses.push(guess)
+                squares += wrongSquare;
+                guesses.push(guess);
             }
             tries_count += 1
             if (guess === answer || tries_count === 5) {

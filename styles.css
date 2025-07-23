@@ -10,22 +10,45 @@ html {
 }
 
 :root {
-    --base-color: #a4d4bc;
-    --base-variant: #e8e9ed;
+    --base-color: #C3C4C5;
+    --base-variant: #ffffff;
     --text-color: #111528;
     --secondary-text: #008741;
     --primary-color: #3a435d;
     --accent-color: #0071ff;
+    --wrong-line: #787C7E;
+    --wrong-station: #C9B458; 
+    --right-station: #6AAA64;
 }
 
 .darkmode {
-    --base-color: #070b1d;
-    --base-variant: #101425;
+    --base-color: #090909;
+    --base-variant: #121213;
     --text-color: #ffffff;
     --secondary-text: #a4a5b8;
     --primary-color: #3a435d;
     --accent-color: #0071ff;
+    --wrong-line: #3A3A3C;
+    --wrong-station: #B59F3B; 
+    --right-station: #538D4E;
 }
+
+.contrastmode {
+    --contrast-text: #000000;
+    --wrong-station: #85C0F9; 
+    --right-station: #F5793A;
+}
+/* 
+light mode colourblind
+--wrong-line: #787C7E;
+--wrong-station: #85C0F9;
+--right-station: #F5793A;
+
+dark mode colourblind
+--wrong-line: #3A3A3C;
+--wrong-station: #85C0F9;
+--right-station: #F5793A;
+*/
 
 #themeswitch { 
     height: 50px;
@@ -53,6 +76,35 @@ html {
 }
 
 .darkmode #themeswitch svg:last-child {
+    display: block;
+}
+
+#contrastswitch { 
+    height: 50px;
+    width: 50px; padding: 0;
+    border-radius: 50%;
+    background-color: var(--base-variant); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
+
+#contrastswitch svg {
+    fill: var(--primary-color);
+}
+
+#contrastswitch svg:last-child {
+    display: none;
+}
+
+.contrastmode #contrastswitch svg:first-child {
+    display: none;
+}
+
+.contrastmode #contrastswitch svg:last-child {
     display: block;
 }
 
@@ -198,16 +250,17 @@ body {
 }
 
 .station.correct {
-    background-color: #008741;
+    background-color: var(--right-station);
+    color: var(--contrast-text);
 }
 
 .station.wrong {
-    background-color: #dd5252;
+    background-color: var(--wrong-line);
 }
 
 .station.rightline {
-    background-color: #f0ff6a;
-    color: #111528
+    background-color: var(--wrong-station);
+    color: var(--contrast-text);
 }
 
 .search {
@@ -254,6 +307,10 @@ body {
 }
 
 #themeswitch svg {
+    fill: var(--primary-color);
+}
+
+#contrastswitch svg {
     fill: var(--primary-color);
 }
 
