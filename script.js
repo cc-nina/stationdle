@@ -333,7 +333,7 @@ subdomains: 'abcd',
 maxZoom: 11.5
 })
 
-dark_tile.addTo(map)
+light_tile.addTo(map)
 
 var resultsMap = L.map('resultsMap'); 
 resultsMap.setZoom(8) 

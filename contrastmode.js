@@ -12,6 +12,7 @@ const disableContrastMode = () => {
 }
 
 if (contrastmode === 'active') enableContrastMode()
+
 contrastSwitch.addEventListener("click", () => {
     contrastmode = localStorage.getItem('contrastmode')
     contrastmode !== "active" ? enableContrastMode() : disableContrastMode()
