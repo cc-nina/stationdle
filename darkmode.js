@@ -1,5 +1,3 @@
-
-
 let darkmode = localStorage.getItem('darkmode')
 const themeSwitch = document.getElementById('themeswitch')
 
@@ -41,9 +39,7 @@ themeSwitch.addEventListener("click", () => {
     darkmode !== "active" ? enableDarkMode() : disableDarkMode()
 })
 
-
 let darkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
-console.log(darkMode)
 
 if (darkMode) {
     themeSwitch.click();
