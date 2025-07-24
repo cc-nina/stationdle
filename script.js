@@ -218,36 +218,31 @@ function results(guessnum, win, squares, ans, guesses) {
 
     const buttons = document.querySelectorAll(".station");
     const guesses = []
+    guessesArr = []
     
     buttons.forEach(async button => {
         button.addEventListener('click', async () => {
             var answer = ans[0].stat_name;
             const guess = button.childNodes[1].innerHTML;
-
-            var rightSquare = "🟩";
-            var wrongSquare = "✖️";
-            var partlySquare = "🟨";
-
-            let contrast = localStorage.getItem('contrastmode');
-            if (contrast === 'active') {
-                rightSquare = "🟧";
-                partlySquare = "🟦";
-            }
+            
+            squares = ""
 
             if (guess === answer) {
                 button.classList.add("correct");
-                squares += rightSquare;
+                guessesArr.push(2);
+                guesses.push(guess);
             } else if (sameline.includes(guess)) {
                 button.classList.add("rightline");
                 button.classList.add("disable");
-                squares += partlySquare;
+                guessesArr.push(1);
                 guesses.push(guess);
             } else {
                 button.classList.add("wrong");
                 button.classList.add("disable");
-                squares += wrongSquare;
+                guessesArr.push(0);
                 guesses.push(guess);
             }
+
             tries_count += 1
             if (guess === answer || tries_count === 5) {
                 for (let i = 0; i < count; i++) {
@@ -257,6 +252,21 @@ function results(guessnum, win, squares, ans, guesses) {
                 if (guess != answer) {
                     tries_count++
                 }
+
+                squaresMap = ["✖️", "🟨", "🟩"]
+
+                let contrast = localStorage.getItem('contrastmode');
+                if (contrast === 'active') {
+                    squaresMap[1] = "🟦";
+                    squaresMap[2] = "🟧";
+                }
+
+                const guessesNum = guessesArr.length
+
+                for (let i = 0; i < guessesNum; i++) {
+                    squares += squaresMap[guessesArr[i]]
+                }
+
                 // write tries_count to the database
                 const {error} = await _supabase
                 .from('statistics')
