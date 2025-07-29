@@ -83,7 +83,9 @@ function results(guessnum, win, squares, ans, guesses) {
 
     const correctmsg = "This is "+ans[0].stat_name+" GO Station, the correct station!"
     L.marker([ans[0].point_y, ans[0].point_x], {icon: rightIcons.get(ans[0].line_abbr)}).addTo(resultsMap).bindPopup(correctmsg);
+    
     const guessesLen = guesses.length
+
     
     for (let i = 0; i < guessesLen; ++i) {
         var curStation = guesses[i].stat_name
@@ -229,7 +231,6 @@ function results(guessnum, win, squares, ans, guesses) {
             if (guess === answer) {
                 button.classList.add("correct");
                 guessesArr.push(2);
-                guesses.push(guess);
             } else if (sameline.includes(guess)) {
                 button.classList.add("rightline");
                 button.classList.add("disable");
