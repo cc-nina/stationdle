@@ -7,6 +7,7 @@ on:
 
 jobs:
   ping_and_commit:
+    environment: production
     runs-on: ubuntu-latest
     # Permission to push code back to the repo
     permissions:
