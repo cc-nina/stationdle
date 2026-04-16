@@ -21,7 +21,9 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
-          curl -X GET "${SUPABASE_URL}/rest/v1/gostations?select=id&limit=1" \
+          # Use a variable to ensure the string is built correctly
+          FULL_URL="${SUPABASE_URL}/rest/v1/gostations?select=id&limit=1"
+          curl -X GET "$FULL_URL" \
           -H "apikey: ${SUPABASE_KEY}" \
           -H "Authorization: Bearer ${SUPABASE_KEY}"
 
