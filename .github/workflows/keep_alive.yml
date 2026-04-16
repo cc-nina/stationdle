@@ -1,18 +1,35 @@
-name: Keep Supabase Alive
+name: Ping Supabase and Keep Alive
 
 on:
   schedule:
-    # Runs at 00:00 UTC every Sunday and Thursday (0 and 4)
     - cron: '0 0 * * 0,4'
-  workflow_dispatch: # Allows you to run this manually for testing
+  workflow_dispatch:
 
 jobs:
-  ping:
+  ping_and_commit:
     runs-on: ubuntu-latest
-    environment: production
+    # Permission to push code back to the repo
+    permissions:
+      contents: write
+      
     steps:
-      - name: Ping Supabase REST API
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Ping Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
-          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/gostations?select=id&limit=1" \
-          -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
-          -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}"
+          curl -X GET "${SUPABASE_URL}/rest/v1/gostations?select=id&limit=1" \
+          -H "apikey: ${SUPABASE_ANON_KEY}" \
+          -H "Authorization: Bearer ${SUPABASE_KEY}"
+
+      - name: Keep Workflow Active
+        run: |
+          date > heartbeat.txt
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add heartbeat.txt
+          git commit -m "Heartbeat: $(date)" || echo "No changes to commit"
+          git push
