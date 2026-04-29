@@ -1,7 +1,5 @@
-require('dotenv').config();
-
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseUrl = window.SUPABASE_URL;
+const supabaseKey = window.SUPABASE_KEY;
 
 const { createClient } = supabase
 const _supabase = createClient(supabaseUrl, supabaseKey);
