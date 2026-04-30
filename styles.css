@@ -142,7 +142,6 @@ body {
     overflow: hidden;
     border: 15px solid var(--base-color);
     padding: 20px;
-    padding-top: 40px;
 }
 
 @media (max-width: 767px) {
@@ -161,6 +160,14 @@ body {
         margin-top: -10px;
         padding-top: 20px;
         padding-bottom: 10px;
+    }
+
+    .station:last-child {
+        margin-bottom: 20px;
+    }
+
+    .searchbar {
+        margin-top: 20px;
     }
 }
 
