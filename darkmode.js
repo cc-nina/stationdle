@@ -3,9 +3,9 @@ const themeSwitch = document.getElementById('themeswitch');
 const enableDarkMode = () => {
     document.body.classList.add('darkmode');
     localStorage.setItem('darkmode', 'active');
-    map.addLayer(dark_tile);
+    if (!map.hasLayer(dark_tile)) map.addLayer(dark_tile);
     if (map.hasLayer(light_tile)) map.removeLayer(light_tile);
-    resultsMap.addLayer(dark_tile_res);
+    if (!resultsMap.hasLayer(dark_tile_res)) resultsMap.addLayer(dark_tile_res);
     if (resultsMap.hasLayer(light_tile_res)) resultsMap.removeLayer(light_tile_res);
 };
 

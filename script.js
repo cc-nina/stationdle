@@ -218,7 +218,7 @@ function results(guessnum, win, squares, ans, guessesInfo, modal) {
         });
 
         if (gameOver) {
-            generate_stations.childNodes.forEach(node => node.classList.add("disable"));
+            generate_stations.querySelectorAll('.station').forEach(node => node.classList.add("disable"));
             const guessesInfo = savedState.guessNames
                 .filter((_, i) => savedState.guessesArr[i] !== 2)
                 .map(name => stations.find(s => s.stat_name === name));
@@ -249,7 +249,7 @@ function results(guessnum, win, squares, ans, guessesInfo, modal) {
 
             if (guess === answer || tries_count === 5) {
                 gameOver = true;
-                generate_stations.childNodes.forEach(node => node.classList.add("disable"));
+                generate_stations.querySelectorAll('.station').forEach(node => node.classList.add("disable"));
 
                 const win = guess === answer;
                 if (!win) tries_count++;
@@ -318,7 +318,7 @@ function results(guessnum, win, squares, ans, guessesInfo, modal) {
         const text = document.getElementById('copyText');
         const notif = document.getElementById('notif');
         navigator.clipboard
-            .writeText(text.innerHTML)
+            .writeText(text.textContent)
             .then(() => { notif.textContent = "Copied!"; })
             .catch(() => { notif.textContent = "Failed to copy!"; });
     });
