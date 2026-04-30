@@ -1,20 +1,26 @@
-let contrastmode = localStorage.getItem('contrastmode')
-const contrastSwitch = document.getElementById('contrastswitch')
+const contrastSwitch = document.getElementById('contrastswitch');
 
 const enableContrastMode = () => {
-    document.body.classList.add('contrastmode')
-    localStorage.setItem('contrastmode', 'active')
-}
+    document.body.classList.add('contrastmode');
+    localStorage.setItem('contrastmode', 'active');
+};
 
 const disableContrastMode = () => {
-    document.body.classList.remove('contrastmode')
-    localStorage.setItem('contrastmode', null)
+    document.body.classList.remove('contrastmode');
+    localStorage.removeItem('contrastmode');
+};
+
+if (localStorage.getItem('contrastmode') === 'active') {
+    enableContrastMode();
+    contrastSwitch.checked = true;
 }
 
-if (contrastmode === 'active') enableContrastMode()
-
 contrastSwitch.addEventListener("click", () => {
-    contrastmode = localStorage.getItem('contrastmode')
-    contrastmode !== "active" ? enableContrastMode() : disableContrastMode()
-})
-
+    if (localStorage.getItem('contrastmode') !== 'active') {
+        enableContrastMode();
+        contrastSwitch.checked = true;
+    } else {
+        disableContrastMode();
+        contrastSwitch.checked = false;
+    }
+});

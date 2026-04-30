@@ -18,6 +18,15 @@
 </head>
 
 <body class="">
+<script>
+  if (localStorage.getItem('darkmode') === 'active' ||
+      (localStorage.getItem('darkmode') === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.body.classList.add('darkmode');
+  }
+  if (localStorage.getItem('contrastmode') === 'active') {
+    document.body.classList.add('contrastmode');
+  }
+</script>
 	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 	<header class="topnav">
 		<a>
@@ -76,7 +85,7 @@
 	<div class="box" id="guessing">
 		<div class="wrapped">
 		<form>
-			<input type="text" placeholder="🔎 Search..." id="searchbar" class="searchbar" onkeyup="filter()">
+			<input type="text" placeholder="🔎 Search..." id="searchbar" class="searchbar">
 			<div class="allstations" id="generatestations"></div>
 		</form>
 		</div>
