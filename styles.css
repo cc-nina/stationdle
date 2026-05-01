@@ -123,8 +123,6 @@ body {
     align-items: center;
     height: 30vh;
     background-color: var(--base-variant);
-    padding-bottom: 20px;
-    padding-top: 55px;		
 }
 
 .container {
@@ -141,33 +139,38 @@ body {
     border-radius: 28px;
     overflow: hidden;
     border: 15px solid var(--base-color);
-    padding: 20px;
+    padding: 28px;
 }
 
 @media (max-width: 767px) {
     .allstations {
-        max-height: 35vh;
-        width: 100vw;
+        flex: 1;
+        min-height: 0;
+        width: 100%;
         overflow-x: clip;
         overflow-y: scroll;
     }
 
-    #map {
-        margin-bottom: -10px;
+    #guessing {
+        align-items: stretch;
+        margin-top: -15px;
     }
 
-    #guessing {
-        margin-top: -10px;
-        padding-top: 20px;
-        padding-bottom: 10px;
+    .wrapped {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #guessing form {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
     }
 
     .station:last-child {
         margin-bottom: 20px;
-    }
-
-    .searchbar {
-        margin-top: 20px;
     }
 }
 
@@ -180,24 +183,19 @@ body {
     #map {
         height: 100vh;
         width: 50vw;
-        margin-right: -10px;
+        margin-right: -15px;
     }
 
     #guessing {
         height: 100vh;
         width: 50vw;
-        margin-left: -10px;
     }
 
     .allstations {
         height: 25vh;
-        width: 100vw;
+        width: 100%;
         overflow-x: clip;
-        overflow-y: scroll;			
-    }
-
-    .wrapped {
-        height: 95vh;
+        overflow-y: scroll;
     }
 
     .modal-inner {
