@@ -97,6 +97,7 @@ function results(guessnum, win, squares, ans, guessesInfo, modal) {
     desc.textContent = message;
 
     const square_display = document.createElement('p');
+    square_display.id = "squareDisplay";
     square_display.innerHTML = squares;
 
     const tobecopied = document.getElementById('copyText');
@@ -201,7 +202,12 @@ function results(guessnum, win, squares, ans, guessesInfo, modal) {
         tries_count = savedState.tries_count;
         guessesArr = savedState.guessesArr;
         guessNames = savedState.guessNames;
-        squares = savedState.squares || "";
+        const squaresMapSaved = ["✖️", "🟨", "🟩"];
+        if (localStorage.getItem('contrastmode') === 'active') {
+            squaresMapSaved[1] = "🟦";
+            squaresMapSaved[2] = "🟧";
+        }
+        squares = savedState.guessesArr.map(g => squaresMapSaved[g]).join("");
 
         document.querySelectorAll(".station").forEach(button => {
             const btnName = button.querySelector('.name').textContent;
