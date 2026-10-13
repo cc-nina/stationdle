@@ -308,16 +308,38 @@ function results(guessnum, win, squares, ans, guessesInfo, modal) {
         document.getElementsByClassName('leaflet-control-attribution')[0].style.display = 'none';
     });
 
-    closeSettings.addEventListener("click", () => {
+    const closeSettingsModal = () => {
         settings.classList.remove("open");
-    });
+        const attribution = document.querySelector('.leaflet-control-attribution');
+        if (attribution) attribution.style.display = 'block';
+    };
+
+    closeSettings.addEventListener("click", closeSettingsModal);
 
     const closeBtn = document.getElementById("closeModal");
     const copyBtn = document.getElementById("copyResults");
 
-    closeBtn.addEventListener("click", () => {
-        document.getElementsByClassName('leaflet-control-attribution')[0].style.display = 'block';
+    const closeResultsModal = () => {
+        document.querySelectorAll('.leaflet-control-attribution').forEach(control => {
+            control.style.display = 'block';
+        });
         modal.classList.remove("open");
+    };
+
+    closeBtn.addEventListener("click", closeResultsModal);
+
+    modal.addEventListener("click", (event) => {
+        if (event.target === modal) closeResultsModal();
+    });
+
+    settings.addEventListener("click", (event) => {
+        if (event.target === settings) closeSettingsModal();
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        if (modal.classList.contains("open")) closeResultsModal();
+        if (settings.classList.contains("open")) closeSettingsModal();
     });
 
     copyBtn.addEventListener("click", () => {
